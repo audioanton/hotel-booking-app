@@ -22,12 +22,15 @@ public class HotelBookingAppApplication {
 
 
     @Bean
-    public CommandLineRunner startup(RoomRepository repo, CustomerRepository customerRepository) {
+    public CommandLineRunner startup(RoomRepository roomRepository, CustomerRepository customerRepository) {
         return args -> {
 
             List<Room> rooms = List.of(
-                    Room.builder().name("The suit").build()
+                    Room.builder().name("The suit").build(),
+                    Room.builder().name("The scrub").build()
             );
+
+            roomRepository.saveAll(rooms);
 
             Customer c1 = Customer.builder().name("Antonio Larzon").build();
             customerRepository.save(c1);
