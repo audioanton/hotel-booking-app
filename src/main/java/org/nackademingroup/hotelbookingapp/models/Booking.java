@@ -1,8 +1,6 @@
 package org.nackademingroup.hotelbookingapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,8 +18,10 @@ public class Booking {
     @GeneratedValue
     private Long id;
 
+    @Temporal(TemporalType.DATE)
     private LocalDate start_date;
 
+    @Temporal(TemporalType.DATE)
     private LocalDate end_date;
 
 
