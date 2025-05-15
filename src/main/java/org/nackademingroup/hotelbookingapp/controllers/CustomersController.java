@@ -4,14 +4,12 @@ import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
-public class CustomerController {
+public class CustomersController {
 
-    @GetMapping("/customer")
+    @GetMapping("/customers")
     public String customer(Model model) {
-        model.addAttribute("customer", new Customer());
-        return "customer";
+        return "customers";
     }
 }
