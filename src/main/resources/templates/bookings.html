@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bookings</title>
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <div>
+        <h1>Bookings</h1>
+        <p>Mockup data is inserted from the booking model only (dates and id). The rest is hard coded since it needs to be joined from other models.</p>
+
+        <div th:if="${bookings.isEmpty()}">No bookings found</div>
+        <table th:if="${!bookings.isEmpty()}">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name of Room</th>
+                    <th>Room Size</th>
+                    <th>Extra Beds</th>
+                    <th>Guest Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="booking : ${bookings}">
+                    <td th:text="${booking.id}"></td>
+                    <td>Room Name</td>
+                    <td>Size</td>
+                    <td>Extra beds</td>
+                    <td>Guest name</td>
+                    <td th:text="${booking.start_date}"></td>
+                    <td th:text="${booking.end_date}"></td>
+                    <td>
+                        <button th:onclick="'window.location.href=\'/bookings/' + ${booking.id} + '\''">
+                            Edit booking
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

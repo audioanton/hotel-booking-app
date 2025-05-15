@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Booking</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div>
+    <h1>Edit Booking</h1>
+
+    <div th:if="${successMessage}" th:text="${successMessage}"></div>
+
+    <form th:action="@{/bookings}" th:object="${booking}" method="post">
+        <div>
+            <h2>Non modifiable details</h2>
+            <p th:text="'Booking id: ' + ${booking.id}"></p>
+            <p>Room name: Name 1</p>
+            <p>Size: Medium</p>
+        </div>
+        <div class="form-group">
+            <h2>Modifiable details</h2>
+            <label for="start-date">Start Date:</label>
+            <input id="start-date" type="date" name="start-date">
+            <label for="end-date">End Date:</label>
+            <input id="end-date" type="date" name="end-date">
+        </div>
+        <div class="form-group">
+            <label>Extra beds:</label>
+            <input type="number"/>
+        </div>
+
+        <button type="submit">Save</button>
+        <button type="submit">Remove</button>
+        <a href="/bookings">Back</a>
+    </form>
+</div>
+</body>
+</html>
