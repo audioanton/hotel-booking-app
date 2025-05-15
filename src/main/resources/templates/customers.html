@@ -1,21 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Customers</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #eaeaea;
+            cursor: pointer;
+        }
+        .no-customers {
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
 
 <h1>Customers</h1>
 
-<div>No customers</div>
-<table>
-<!--    <tr th:each="customer : ${customers}">-->
-<!--        <td th:text="${customer.name}"></td>-->
-<!--        <td th:text="${room.name}"></td>-->
-<!--    </tr>-->
+<div th:if="${customers.empty}" class="no-customers">No customers found</div>
+<table th:if="${!customers.empty}">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="customer : ${customers}" th:onclick="'window.location.href=\'/customers/' + ${customer.id} + '\''">
+            <td th:text="${customer.id}"></td>
+            <td th:text="${customer.name}"></td>
+            <td th:text="${customer.phone_number}"></td>
+        </tr>
+    </tbody>
 </table>
-
 
 </body>
 </html>
