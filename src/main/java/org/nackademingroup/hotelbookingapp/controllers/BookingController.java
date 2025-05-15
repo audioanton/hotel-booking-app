@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class BookingController {
@@ -20,5 +21,17 @@ public class BookingController {
         List<Booking> bookings = bookingService.getMockBookings();
         model.addAttribute("bookings", bookings);
         return "bookings";
+    }
+
+    @GetMapping("/bookings/{id}")
+    public String getBooking(@PathVariable("id") Long id, Model model) {
+        Optional<Booking> bookingOpt = bookingService.getBookingById(id);
+
+        if (bookingOpt.isPresent()) {
+            model.addAttribute("booking", bookingOpt.get());
+            return "booking";
+        } else {
+            return "redirect:/bookings";
+        }
     }
 }

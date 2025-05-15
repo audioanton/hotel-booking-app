@@ -1,6 +1,7 @@
 package org.nackademingroup.hotelbookingapp.services;
 
 import org.nackademingroup.hotelbookingapp.models.Booking;
+import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingService {
@@ -30,4 +32,19 @@ public class BookingService {
 
     return mockBookings;
     }
+
+    public Optional<Booking> getBookingById(Long id) {
+        return getMockBookings().stream()
+                .filter(booking -> booking.getId().equals(id))
+                .findFirst();
+    }
+
+    public Booking updateBooking(Booking booking) {
+        return booking;
+    }
+
+    public void removeBooking(Booking booking) {
+
+    }
+
 }
