@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Index</h1>
+<p th:text="${message}"></p>
+
+
+<table>
+    <tr th:each="room : ${rooms}">
+        <td th:text="${room.id}"></td>
+        <td th:text="${room.name}"></td>
+    </tr>
+</table>
+
+
+</body>
+</html>
