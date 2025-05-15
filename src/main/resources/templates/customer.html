@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Edit Customer</title>
@@ -11,7 +11,7 @@
         
         <div th:if="${successMessage}" th:text="${successMessage}"></div>
 
-        <form th:action="@{/customers/{id}(id=${customer.id})}" th:object="${customer}" method="post">
+        <form th:action="@{/customers}" th:object="${customer}" method="post">
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" th:field="*{name}" />

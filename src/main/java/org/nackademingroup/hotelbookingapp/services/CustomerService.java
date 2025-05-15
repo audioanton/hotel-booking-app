@@ -16,8 +16,6 @@ public class CustomerService {
     
     public List<Customer> getMockCustomers() {
         List<Customer> mockCustomers = new ArrayList<>();
-        
-        // Create mock customer data
         mockCustomers.add(Customer.builder()
                 .id(1L)
                 .name("Antonio Larzon")
@@ -29,7 +27,6 @@ public class CustomerService {
                 .name("Viktor Jonzon")
                 .phone_number("098-765-4321")
                 .build());
-        
         return mockCustomers;
     }
     

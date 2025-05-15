@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Customers</title>
@@ -7,11 +7,11 @@
 <body>
     <div th:replace="fragments/header :: header"></div>
 
-    <div class="container">
+    <div>
         <h1>Customers</h1>
 
-        <div th:if="${customers.empty}" class="no-customers">No customers found</div>
-        <table th:if="${!customers.empty}">
+        <div th:if="${customers.isEmpty()}">No customers found</div>
+        <table th:if="${!customers.isEmpty()}">
             <thead>
                 <tr>
                     <th>ID</th>
