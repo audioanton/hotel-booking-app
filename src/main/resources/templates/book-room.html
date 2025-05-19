@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Book Room</title>
@@ -10,10 +10,8 @@
         <label for="start-date">Start Date:</label>
         <input id="start-date" type="date" name="start-date">
         <br>
-        <br>
         <label for="end-date">End Date:</label>
         <input id="end-date" type="date" name="end-date">
-        <br>
         <br>
         <label for="guest">Guest:</label>
         <select id="guest" name="guest">
@@ -22,12 +20,34 @@
             <option value="none" disabled selected>None</option>
         </select>
         <br>
-        <br>
         <label for="total-guests">Total Guests:</label>
         <input id="total-guests" name="total-guests" type="number">
         <br>
-        <br>
         <button type="submit">Search Rooms</button>
     </form>
+    <div th:if="${rooms.isEmpty()}" th:text="No vacancies found"></div>
+    <h3 th:if="${!rooms.isEmpty()}" th:text="Available Rooms"></h3>
+    <table th:if="${!rooms.isEmpty()}">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Room Size</th>
+                <th>Beds</th>
+                <th>Available Extra Beds</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="room : ${rooms}">
+                <td th:text="${room.name}"></td>
+                <td th:text="${room.size}"></td>
+                <td th:text="${room.beds}"></td>
+                <td th:text="${room.extraBeds}"></td>
+                <td>
+                    <!-- TODO: fix onclick -->
+                    <button th:onclick="/select-room/${room.id}">Select Room</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
