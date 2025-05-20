@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -19,10 +22,20 @@ public class Booking {
     private Long id;
 
     @Temporal(TemporalType.DATE)
-    private LocalDate start_date;
+    private LocalDate startDate;
 
     @Temporal(TemporalType.DATE)
-    private LocalDate end_date;
+    private LocalDate endDate;
+
+    @OneToOne
+    @JoinColumn
+    @Cascade(CascadeType.ALL)
+    private Customer customer;
+
+    @OneToOne
+    @JoinColumn
+    @Cascade(CascadeType.ALL)
+    private BookingDetails details;
 
 
 }

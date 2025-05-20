@@ -1,7 +1,7 @@
 package org.nackademingroup.hotelbookingapp.controllers;
 
 import org.nackademingroup.hotelbookingapp.models.Customer;
-import org.nackademingroup.hotelbookingapp.services.CustomerService;
+import org.nackademingroup.hotelbookingapp.services.service_implementations.CustomerServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class CustomersController {
 
     @Autowired
-    private CustomerService customerService;
+    private CustomerServiceImp customerService;
 
     @GetMapping("/customers")
     public String customer(Model model) {
