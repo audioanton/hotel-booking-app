@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Data
 @Entity
@@ -17,11 +19,12 @@ public class BookingDetails {
 
     @ManyToOne
     @JoinColumn
+    @Cascade(CascadeType.ALL)
     private Room room;
 
-    @ManyToOne
-    @JoinColumn
-    private Booking booking;
+//    @ManyToOne
+//    @JoinColumn
+//    private Booking booking;
 
     private int extraBeds;
 }

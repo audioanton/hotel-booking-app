@@ -22,18 +22,18 @@
                     <th>Guest Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Details</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="booking : ${bookings}">
                     <td th:text="${booking.id}"></td>
-                    <td>Room Name</td>
-                    <td>Size</td>
-                    <td>Extra beds</td>
-                    <td>Guest name</td>
-                    <td th:text="${booking.start_date}"></td>
-                    <td th:text="${booking.end_date}"></td>
+                    <td th:text="${booking.bookingDetails.room.name}"></td>
+                    <td th:text="${booking.bookingDetails.room.roomSize.size}"></td>
+                    <td th:text="${booking.bookingDetails.extraBeds}"></td>
+                    <td th:text="${booking.customer.name}"></td>
+                    <td th:text="${booking.startDate}"></td>
+                    <td th:text="${booking.endDate}"></td>
                     <td>
                         <button th:onclick="'window.location.href=\'/bookings/' + ${booking.id} + '\''">
                             Edit booking
