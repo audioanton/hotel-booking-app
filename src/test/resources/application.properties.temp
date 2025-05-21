@@ -1,0 +1,11 @@
+# delete .temp from file ending and change the username, password lines.
+
+spring.profiles.active=test
+
+spring.datasource.url=jdbc:mysql://localhost:3306/hotel_testing_db
+
+# uncomment and change to your own test_user and password
+#spring.datasource.username=test_user
+#spring.datasource.password=secret_password
+
+spring.jpa.hibernate.ddl-auto=create
