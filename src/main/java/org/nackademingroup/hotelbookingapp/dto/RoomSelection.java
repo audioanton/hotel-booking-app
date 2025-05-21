@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class RoomDto {
-    private Long id;
-    private String name;
-    private RoomSizeDto roomSize;
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoomSelection {
+    private int roomId;
+    private int totalGuests;
+    private int guestId;
 }

@@ -55,4 +55,9 @@ public class CustomerServiceImp implements CustomerService {
                 .phoneNumber(customer.getPhoneNumber())
                 .build();
     }
+
+    @Override
+    public List<CustomerDto> getCustomerDtos() {
+        return customerRepository.findAll().stream().map(this::toCustomerDto).toList();
+    }
 }

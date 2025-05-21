@@ -6,48 +6,56 @@
 </head>
 <body>
     <h1>Book Room</h1>
-    <form th:action="@{/searchRoom}" th:object="roomSearch" method="post">
-        <label for="start-date">Start Date:</label>
-        <input id="start-date" type="date" name="start-date">
-        <br>
-        <label for="end-date">End Date:</label>
-        <input id="end-date" type="date" name="end-date">
-        <br>
-        <label for="guest">Guest:</label>
-        <select id="guest" name="guest">
-            <!--  iterate over guests and put guest name in option elements -->
-            <option th:each="guest: ${guests}" th:text="${guest.name}" th:value="${guest.id}"></option>
-            <option value="none" disabled selected>None</option>
-        </select>
-        <br>
-        <label for="total-guests">Total Guests:</label>
-        <input id="total-guests" name="total-guests" type="number">
-        <br>
+    <form th:action="@{/book-room}" th:object="${roomSearch}" method="post">
+        <table>
+            <tr>
+                <td><label for="start-date">Start Date:</label></td>
+                <td><input id="start-date" type="date" name="start-date"></td>
+            </tr>
+            <tr>
+                <td><label for="end-date">End Date:</label></td>
+                <td><input id="end-date" type="date" name="end-date"></td>
+            </tr>
+            <tr>
+                <td><label for="total-guests">Total Guests:</label></td>
+                <td><input id="total-guests" name="total-guests" type="number"></td>
+            </tr>
+        </table>
         <button type="submit">Search Rooms</button>
     </form>
-    <div th:if="${rooms.isEmpty()}" th:text="No vacancies found"></div>
-    <h3 th:if="${!rooms.isEmpty()}" th:text="Available Rooms"></h3>
-    <table th:if="${!rooms.isEmpty()}">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Room Size</th>
-                <th>Beds</th>
-                <th>Available Extra Beds</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="room : ${rooms}">
-                <td th:text="${room.name}"></td>
-                <td th:text="${room.size}"></td>
-                <td th:text="${room.beds}"></td>
-                <td th:text="${room.extraBeds}"></td>
-                <td>
-                    <!-- TODO: fix onclick -->
-                    <button th:onclick="/select-room/${room.id}">Select Room</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div th:if="${search}">
+        <p th:if="${rooms.isEmpty()}">No vacancies found</p>
+        <h3>Available Rooms</h3>
+        <form>
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Room Size</th>
+                    <th>Beds</th>
+                    <th>Available Extra Beds</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="room : ${rooms}">
+                    <td th:text="${room.name}"></td>
+<!--                    <td th:text="${room.size}"></td>-->
+                    <td th:text="${room.getRoomSize().getSize()}"></td>
+<!--                    <td th:text="${room.extraBeds}"></td>-->
+                    <td><label th:value="${room.id}">
+                        <input type="radio">
+                    </label></td>
+                </tr>
+                </tbody>
+            </table>
+            <label for="guest">Guest:</label>
+            <select id="guest" name="guest">
+                <!--  iterate over guests and put guest name in option elements -->
+                <option th:each="guest: ${guests}" th:text="${guest.name}" th:value="${guest.id}"></option>
+                <option value="none" disabled selected>None</option>
+            </select>
+            <button type="submit" th:onclick="@{/book-room/selected}" th:method="post" th:object="${roomSelection}">Book Room</button>
+        </form>
+    </div>
 </body>
 </html>

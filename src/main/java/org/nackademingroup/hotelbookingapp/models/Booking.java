@@ -35,7 +35,7 @@ public class Booking {
     @OneToOne
     @JoinColumn
     @Cascade(CascadeType.ALL)
-    private BookingDetails details;
+    private BookingDetails bookingDetails;
 
 
 }
