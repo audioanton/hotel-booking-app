@@ -26,29 +26,43 @@ public class HotelBookingAppApplication {
             List<RoomSize> roomSizes = List.of(
                     RoomSize.builder().size("Large").beds(4).maxExtraBeds(2).build()
             );
-//            roomSizeRepository.saveAll(roomSizes);
 
             List<Room> rooms = List.of(
                     Room.builder().name("The suit").roomsize(roomSizes.get(0)).build(),
                     Room.builder().name("The scrub").roomsize(roomSizes.get(0)).build()
             );
 
-//            roomRepository.saveAll(rooms);
+            List<Customer> customers = List.of(
+                    Customer.builder().name("Marcuso Efternamno?").build(),
+                    Customer.builder().name("Antonio Larzon").build(),
+                    Customer.builder().name("Vittorio Jonassono").build()
+            );
 
-            Customer c1 = Customer.builder().name("Antonio Larzon").build();
-//            customerRepository.save(c1);
 
             List<BookingDetails> bookingDetails = List.of(
+                    BookingDetails.builder().room(rooms.get(0)).extraBeds(2).build(),
+                    BookingDetails.builder().room(rooms.get(1)).extraBeds(1).build(),
                     BookingDetails.builder().room(rooms.get(0)).extraBeds(2).build()
             );
-//            bookingDetailsRepository.saveAll(bookingDetails);
 
             List<Booking> bookings = List.of(
                     Booking.builder()
                             .startDate(LocalDate.parse("2025-05-20"))
                             .endDate(LocalDate.parse("2025-05-25"))
-                            .customer(c1)
-                            .details(bookingDetails.get(0))
+                            .customer(customers.get(0))
+                            .bookingDetails(bookingDetails.get(0))
+                            .build(),
+                    Booking.builder()
+                            .startDate(LocalDate.parse("2025-05-26"))
+                            .endDate(LocalDate.parse("2025-05-27"))
+                            .customer(customers.get(1))
+                            .bookingDetails(bookingDetails.get(1))
+                            .build(),
+                    Booking.builder()
+                            .startDate(LocalDate.parse("2025-06-01"))
+                            .endDate(LocalDate.parse("2025-06-05"))
+                            .customer(customers.get(2))
+                            .bookingDetails(bookingDetails.get(2))
                             .build()
             );
 

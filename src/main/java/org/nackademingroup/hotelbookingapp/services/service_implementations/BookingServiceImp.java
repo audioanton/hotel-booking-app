@@ -71,9 +71,9 @@ public class BookingServiceImp implements BookingService {
     public List<BookingDto> getBookings() {
         List<Booking> bookings = bookingRepository.findAll();
         return bookings.stream().map(b -> {
-                    RoomSizeDto roomSize = roomSizeService.toRoomSizeDto(b.getDetails().getRoom().getRoomsize());
-                    RoomDto room = roomService.toRoomDto(b.getDetails().getRoom(), roomSize);
-                    BookingDetailsDto detailsDto = bookingDetailsService.toBookingDetailsDto(b.getDetails(), room);
+                    RoomSizeDto roomSize = roomSizeService.toRoomSizeDto(b.getBookingDetails().getRoom().getRoomsize());
+                    RoomDto room = roomService.toRoomDto(b.getBookingDetails().getRoom(), roomSize);
+                    BookingDetailsDto detailsDto = bookingDetailsService.toBookingDetailsDto(b.getBookingDetails(), room);
                     CustomerDto customerDto = customerService.toCustomerDto(b.getCustomer());
                     return toBookingDto(b, detailsDto, customerDto);
                 })
@@ -82,7 +82,8 @@ public class BookingServiceImp implements BookingService {
 
     @Override
     public List<RoomDto> getAvailableRooms(RoomSearch roomSearch) {
-        return List.of();
+        System.out.println(roomService.getRooms());
+        return roomService.getRooms();
     }
 
 }

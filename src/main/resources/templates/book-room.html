@@ -39,9 +39,9 @@
                 <tbody>
                 <tr th:each="room : ${rooms}">
                     <td th:text="${room.name}"></td>
-                    <td th:text="${room.size}"></td>
-                    <td th:text="${room.beds}"></td>
-                    <td th:text="${room.extraBeds}"></td>
+<!--                    <td th:text="${room.size}"></td>-->
+                    <td th:text="${room.getRoomSize().getSize()}"></td>
+<!--                    <td th:text="${room.extraBeds}"></td>-->
                     <td><label th:value="${room.id}">
                         <input type="radio">
                     </label></td>

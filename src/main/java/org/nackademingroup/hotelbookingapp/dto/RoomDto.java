@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class RoomDto {
-//    private Long id;
+    private Long id;
     private String name;
     private RoomSizeDto roomSize;
 }
