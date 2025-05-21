@@ -78,7 +78,11 @@ public class BookingServiceImp implements BookingService {
                     return toBookingDto(b, detailsDto, customerDto);
                 })
                 .toList();
+    }
 
+    @Override
+    public List<RoomDto> getAvailableRooms(RoomSearch roomSearch) {
+        return List.of();
     }
 
 }
