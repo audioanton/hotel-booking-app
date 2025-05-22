@@ -42,10 +42,18 @@ public class BookingServiceImp implements BookingService {
         return mockBookings;
     }
 
-    public Optional<BookingDto> getBookingById(Long id) {
-        return getMockBookings().stream()
-                .filter(booking -> booking.getId().equals(id))
-                .findFirst();
+    //ToDo: Break duplicate code into function (the mapping of a booking to a bookingDto)
+
+    public BookingDto getBookingById(Long id) {
+        Optional<Booking> booking = bookingRepository.findById(id);
+
+        return booking.map(b -> {
+            RoomSizeDto roomSize = roomSizeService.toRoomSizeDto(b.getBookingDetails().getRoom().getRoomsize());
+            RoomDto room = roomService.toRoomDto(b.getBookingDetails().getRoom(), roomSize);
+            BookingDetailsDto detailsDto = bookingDetailsService.toBookingDetailsDto(b.getBookingDetails(), room);
+            CustomerDto customerDto = customerService.toCustomerDto(b.getCustomer());
+            return toBookingDto(b, detailsDto, customerDto);
+        }).orElse(null);
     }
 
     public Booking updateBooking(Booking booking) {

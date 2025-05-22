@@ -27,13 +27,13 @@ public class BookingController {
 
     @GetMapping("/bookings/{id}")
     public String getBooking(@PathVariable("id") Long id, Model model) {
-        Optional<BookingDto> bookingOpt = bookingService.getBookingById(id);
+        BookingDto booking = bookingService.getBookingById(id);
 
-        if (bookingOpt.isPresent()) {
-            model.addAttribute("booking", bookingOpt.get());
-            return "booking";
-        } else {
+        if (booking == null) {
             return "redirect:/bookings";
+        } else {
+            model.addAttribute("booking", booking);
+            return "booking";
         }
     }
 }
