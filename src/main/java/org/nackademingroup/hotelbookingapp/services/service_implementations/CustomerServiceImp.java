@@ -3,6 +3,7 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 import org.nackademingroup.hotelbookingapp.dto.CustomerDto;
 import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.nackademingroup.hotelbookingapp.repositories.CustomerRepository;
+import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class CustomerServiceImp implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
     
+    @Autowired
+    private BookingRepository bookingRepository;
+
     public List<Customer> getMockCustomers() {
         /*
         List<Customer> mockCustomers = new ArrayList<>();
@@ -36,15 +40,37 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> getCustomerById(Long id) {
-        return getMockCustomers().stream()
-                .filter(customer -> customer.getId().equals(id))
-                .findFirst();
+    public Optional<CustomerDto> getCustomerDtoById(Long id) {
+        Optional<Customer> customerOpt = customerRepository.findById(id);
+        return customerOpt.map(this::toCustomerDto);
+    }
+
+    @Override
+    public Customer createCustomer(Customer customer) {
+        return customerRepository.save(customer);
     }
 
     @Override
     public Customer updateCustomer(Customer customer) {
-        return customer;
+        Optional<Customer> customerOpt = customerRepository.findById(customer.getId());
+        if (customerOpt.isPresent()) {
+            Customer existingCustomer = customerOpt.get();
+            existingCustomer.setName(customer.getName());
+            existingCustomer.setPhoneNumber(customer.getPhoneNumber());
+            return customerRepository.save(existingCustomer);
+        } else {
+            return customer;
+        }
+    }
+
+    @Override
+    public boolean canDeleteCustomer(Long id) {
+        return bookingRepository.countByCustomerId(id) == 0;
+    }
+
+    @Override
+    public void deleteCustomer(Long id) {
+        customerRepository.deleteById(id);
     }
 
     @Override
@@ -58,6 +84,11 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public List<CustomerDto> getCustomerDtos() {
-        return customerRepository.findAll().stream().map(this::toCustomerDto).toList();
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDto> customerDtos = new ArrayList<>();
+        for (Customer customer : customers) {
+            customerDtos.add(toCustomerDto(customer));
+        }
+        return customerDtos;
     }
 }

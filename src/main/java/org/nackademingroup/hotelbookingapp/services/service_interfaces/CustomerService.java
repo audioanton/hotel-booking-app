@@ -7,11 +7,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-    public Optional<Customer> getCustomerById(Long id);
+    public Optional<CustomerDto> getCustomerDtoById(Long id);
 
     public Customer updateCustomer(Customer customer);
 
     public CustomerDto toCustomerDto(Customer customer);
 
     public List<CustomerDto> getCustomerDtos();
+
+    public Customer createCustomer(Customer customer);
+
+    public boolean canDeleteCustomer(Long id);
+
+    public void deleteCustomer(Long id);
 }

@@ -29,7 +29,7 @@ public class Booking {
 
     @OneToOne
     @JoinColumn
-    @Cascade(CascadeType.ALL)
+//    @Cascade(CascadeType.ALL)
     private Customer customer;
 
     @OneToOne

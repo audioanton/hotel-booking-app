@@ -23,6 +23,7 @@ public class HotelBookingAppApplication {
     @Bean
     public CommandLineRunner startup(RoomRepository roomRepository, CustomerRepository customerRepository, RoomSizeRepository roomSizeRepository, BookingDetailsRepository bookingDetailsRepository, BookingRepository bookingRepository) {
         return args -> {
+            bookingRepository.deleteAll();
             List<RoomSize> roomSizes = List.of(
                     RoomSize.builder().size("Large").beds(4).maxExtraBeds(2).build()
             );
@@ -32,11 +33,13 @@ public class HotelBookingAppApplication {
                     Room.builder().name("The scrub").roomsize(roomSizes.get(0)).build()
             );
 
+            customerRepository.deleteAll();
             List<Customer> customers = List.of(
                     Customer.builder().name("Marcuso Efternamno?").build(),
                     Customer.builder().name("Antonio Larzon").build(),
                     Customer.builder().name("Vittorio Jonassono").build()
             );
+            customerRepository.saveAll(customers);
 
 
             List<BookingDetails> bookingDetails = List.of(
@@ -51,18 +54,6 @@ public class HotelBookingAppApplication {
                             .endDate(LocalDate.parse("2025-05-25"))
                             .customer(customers.get(0))
                             .bookingDetails(bookingDetails.get(0))
-                            .build(),
-                    Booking.builder()
-                            .startDate(LocalDate.parse("2025-05-26"))
-                            .endDate(LocalDate.parse("2025-05-27"))
-                            .customer(customers.get(1))
-                            .bookingDetails(bookingDetails.get(1))
-                            .build(),
-                    Booking.builder()
-                            .startDate(LocalDate.parse("2025-06-01"))
-                            .endDate(LocalDate.parse("2025-06-05"))
-                            .customer(customers.get(2))
-                            .bookingDetails(bookingDetails.get(2))
                             .build()
             );
 
