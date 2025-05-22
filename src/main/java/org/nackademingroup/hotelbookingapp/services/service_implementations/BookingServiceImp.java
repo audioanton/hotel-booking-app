@@ -2,12 +2,12 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 
 import org.nackademingroup.hotelbookingapp.dto.*;
 import org.nackademingroup.hotelbookingapp.models.Booking;
+import org.nackademingroup.hotelbookingapp.models.BookingDetails;
 import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +64,22 @@ public class BookingServiceImp implements BookingService {
     public void removeBooking(Long id) {
         bookingRepository.deleteById(id);
     }
+
+    @Override
+    public void updateBookingExtraBeds(Long id, Booking updatedBooking) {
+        bookingRepository.findById(id).ifPresent(b -> {
+            BookingDetails currentBooking = b.getBookingDetails();
+            int maxExtraBeds = currentBooking.getRoom().getRoomsize().getMaxExtraBeds();
+
+            if (updatedBooking.getBookingDetails().getExtraBeds() <= maxExtraBeds) {
+                currentBooking.setExtraBeds(updatedBooking.getBookingDetails().getExtraBeds());
+                bookingRepository.save(b);
+            } else {
+                throw new IllegalArgumentException("Extra beds cannot exceed the maximum allowed (" + maxExtraBeds + ")");
+            }
+        });
+    }
+
 
     @Override
     public BookingDto toBookingDto(Booking booking, BookingDetailsDto details, CustomerDto customer) {

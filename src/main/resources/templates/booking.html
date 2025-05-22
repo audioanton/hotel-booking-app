@@ -16,17 +16,19 @@
     <p th:text="'Dates: ' + ${booking.startDate} + ' - ' + ${booking.endDate}" />
 
     <form th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post">
-        <button type="submit">Cancel booking</button>
+        <button type="submit" style="background-color: #ff4444; color: white;">Cancel booking</button>
     </form>
 
     <h2>Edit booking</h2>
 
-    <form th:action="@{/edit-booking/extra-beds(id=${booking.id})}" th:object="${booking}" method="post">
+    <form th:action="@{/bookings/{id}/edit/extra-beds(id=${booking.id})}" th:object="${booking}" method="post">
         <div class="form-group">
             <label>Extra beds:</label>
-            <input type="number" th:field="*{bookingDetails.extraBeds}"/>
+            <input type="number" name="extraBeds" th:field="*{bookingDetails.extraBeds}"/>
             <button type="submit">Save</button>
         </div>
+        <div th:if="${errorMessage}" class="error-message" style="color: red;" th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}" class="success-message" style="color: green;" th:text="${successMessage}"></div>
     </form>
     <br>
     <form th:action="@{/edit-booking/change-dates(id=${booking.id})}" th:object="${booking}" method="post">
@@ -45,10 +47,11 @@
         </div>
     </form>
     <br>
+    <p>Possible ToDo:</p>
     <button type="submit"
             th:action="@{/edit-booking/change-details-todo(id=${booking.id})}"
             th:object="${booking}"
-            method="post">Search alternatives (ToDo)</button>
+            method="post">Search alternatives</button>
     <br>
     <br>
     <a href="/bookings">← Back to bookings</a>

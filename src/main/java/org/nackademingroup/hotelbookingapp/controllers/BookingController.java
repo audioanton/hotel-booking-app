@@ -43,4 +43,20 @@ public class BookingController {
         bookingService.removeBooking(id);
         return "redirect:/bookings";
     }
+
+    @PostMapping("/bookings/{id}/edit/extra-beds")
+    public String editExtraBeds(@PathVariable("id") Long id, Booking booking, Model model) {
+        try {
+            bookingService.updateBookingExtraBeds(id, booking);
+            BookingDto updatedBooking = bookingService.getBookingById(id);
+            model.addAttribute("booking", updatedBooking);
+            model.addAttribute("successMessage", "Extra beds updated successfully");
+            return "booking";
+        } catch (IllegalArgumentException e) {
+            BookingDto currentBooking = bookingService.getBookingById(id);
+            model.addAttribute("booking", currentBooking);
+            model.addAttribute("errorMessage", e.getMessage());
+            return "booking";
+        }
+    }
 }
