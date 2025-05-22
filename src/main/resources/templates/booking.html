@@ -44,9 +44,10 @@
     </form>
     <br>
     <button type="submit"
-            th:action="@{/edit-booking/cancel(id=${booking.id})}"
+            th:action="@{/edit-booking/change-details-todo(id=${booking.id})}"
             th:object="${booking}"
-            method="post">Search alternatives</button>
+            method="post">Search alternatives (ToDo)</button>
+    <br>
     <br>
     <a href="/bookings">← Back to bookings</a>
 

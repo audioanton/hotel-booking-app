@@ -33,6 +33,7 @@ public class BookingController {
             return "redirect:/bookings";
         } else {
             model.addAttribute("booking", booking);
+            model.addAttribute("search", false);
             return "booking";
         }
     }
