@@ -3,6 +3,7 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 import org.nackademingroup.hotelbookingapp.dto.CustomerDto;
 import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.nackademingroup.hotelbookingapp.repositories.CustomerRepository;
+import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class CustomerServiceImp implements CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
     
+    @Autowired
+    private BookingRepository bookingRepository;
+
     public List<Customer> getMockCustomers() {
         /*
         List<Customer> mockCustomers = new ArrayList<>();
@@ -57,6 +61,11 @@ public class CustomerServiceImp implements CustomerService {
         } else {
             return customer;
         }
+    }
+
+    @Override
+    public boolean canDeleteCustomer(Long id) {
+        return bookingRepository.countByCustomerId(id) == 0;
     }
 
     @Override
