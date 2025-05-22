@@ -1,33 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Customers</title>
-</head>
-<body>
-    <div th:replace="fragments/header :: header"></div>
+<div th:replace="fragments/header :: header"></div>
+<div>
+    <h1>Customers</h1>
 
+    <div th:if="${customers.isEmpty()}">No customers found</div>
     <div>
-        <h1>Customers</h1>
-
-        <div th:if="${customers.isEmpty()}">No customers found</div>
-        <table th:if="${!customers.isEmpty()}">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="customer : ${customers}" th:onclick="'window.location.href=\'/customers/' + ${customer.id} + '\''">
-                    <td th:text="${customer.getId()}"></td>
-                    <td th:text="${customer.getName()}"></td>
-                    <td th:text="${customer.getPhoneNumber()}"></td>
-                </tr>
-            </tbody>
-        </table>
+        <a href="/customers/new" class="btn">
+            <button type="button">Add</button>
+        </a>
     </div>
-</body>
-</html>
+    <table th:if="${!customers.isEmpty()}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer : ${customers}" th:onclick="'window.location.href=\'/customers/' + ${customer.id} + '\''">
+            <td th:text="${customer.getId()}"></td>
+            <td th:text="${customer.getName()}"></td>
+            <td th:text="${customer.getPhoneNumber()}"></td>
+        </tr>
+        </tbody>
+    </table>
 
+</div>
+<div th:replace="fragments/footer :: footer"></div>

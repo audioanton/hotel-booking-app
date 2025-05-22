@@ -39,6 +39,19 @@ public class CustomersController {
         }
     }
 
+    @GetMapping("/customers/new")
+    public String showNewCustomerForm(Model model) {
+        CustomerDto newCustomer = CustomerDto.builder().build();
+        model.addAttribute("customer", newCustomer);
+        return "customer";
+    }
+
+    @PostMapping("/customers/create")
+    public String createCustomer(Customer customer) {
+        customerService.createCustomer(customer);
+        return "redirect:/customers";
+    }
+
     @PostMapping("/customers/{id}")
     public String updateCustomer(@PathVariable("id") Long id, Customer customer) {
         // TODO: Validation?

@@ -42,6 +42,11 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
+    public Customer createCustomer(Customer customer) {
+        return customerRepository.save(customer);
+    }
+
+    @Override
     public Customer updateCustomer(Customer customer) {
         Optional<Customer> customerOpt = customerRepository.findById(customer.getId());
         if (customerOpt.isPresent()) {
