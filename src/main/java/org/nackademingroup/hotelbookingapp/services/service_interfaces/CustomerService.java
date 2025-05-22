@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-    public Optional<Customer> getCustomerById(Long id);
+    public Optional<CustomerDto> getCustomerDtoById(Long id);
 
     public Customer updateCustomer(Customer customer);
 

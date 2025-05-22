@@ -36,15 +36,22 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> getCustomerById(Long id) {
-        return getMockCustomers().stream()
-                .filter(customer -> customer.getId().equals(id))
-                .findFirst();
+    public Optional<CustomerDto> getCustomerDtoById(Long id) {
+        Optional<Customer> customerOpt = customerRepository.findById(id);
+        return customerOpt.map(this::toCustomerDto);
     }
 
     @Override
     public Customer updateCustomer(Customer customer) {
-        return customer;
+        Optional<Customer> customerOpt = customerRepository.findById(customer.getId());
+        if (customerOpt.isPresent()) {
+            Customer existingCustomer = customerOpt.get();
+            existingCustomer.setName(customer.getName());
+            existingCustomer.setPhoneNumber(customer.getPhoneNumber());
+            return customerRepository.save(existingCustomer);
+        } else {
+            return customer;
+        }
     }
 
     @Override
@@ -58,6 +65,11 @@ public class CustomerServiceImp implements CustomerService {
 
     @Override
     public List<CustomerDto> getCustomerDtos() {
-        return customerRepository.findAll().stream().map(this::toCustomerDto).toList();
+        List<Customer> customers = customerRepository.findAll();
+        List<CustomerDto> customerDtos = new ArrayList<>();
+        for (Customer customer : customers) {
+            customerDtos.add(toCustomerDto(customer));
+        }
+        return customerDtos;
     }
 }
