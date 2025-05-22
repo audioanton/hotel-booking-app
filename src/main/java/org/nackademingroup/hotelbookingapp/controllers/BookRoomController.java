@@ -29,7 +29,7 @@ public class BookRoomController {
     public String showAvailableRooms(Model model, RoomSearch roomSearch) {
         model.addAttribute("rooms", bookingService.getAvailableRooms(roomSearch));
         model.addAttribute(roomSearch);
-        model.addAttribute("guests", customerService.getCustomerDtos());
+        model.addAttribute("customers", customerService.getCustomerDtos());
         model.addAttribute("search", true);
         model.addAttribute("roomSelection", RoomSelection.builder().build());
         return "book-room";
@@ -37,6 +37,7 @@ public class BookRoomController {
 
     @PostMapping("/book-room/selected")
     public String selectRoom(Model model, RoomSelection roomSelection) {
-        return "index";
+        System.out.println(roomSelection);
+        return "redirect:/book-room";
     }
 }
