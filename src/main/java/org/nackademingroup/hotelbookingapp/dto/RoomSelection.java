@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoomSelection {
-    private int roomId;
+    private Long roomId;
     private int totalGuests;
     private Long customerId;
     @Temporal(TemporalType.DATE)
