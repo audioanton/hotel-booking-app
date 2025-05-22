@@ -129,7 +129,6 @@ public class BookingServiceImp implements BookingService {
 
     @Override
     public List<RoomDto> getAvailableRooms(RoomSearch roomSearch) {
-        System.out.println(roomService.getRooms());
         return roomService.getRooms();
     }
 

@@ -28,9 +28,11 @@ public class BookRoomController {
     @PostMapping("/book-room")
     public String showAvailableRooms(Model model, RoomSearch roomSearch) {
         model.addAttribute("rooms", bookingService.getAvailableRooms(roomSearch));
+        System.out.println(bookingService.getAvailableRooms(roomSearch));
         model.addAttribute(roomSearch);
         model.addAttribute("customers", customerService.getCustomerDtos());
         model.addAttribute("search", true);
+        model.addAttribute("roomSearch", roomSearch);
         model.addAttribute("roomSelection", RoomSelection.builder().build());
         return "book-room";
     }

@@ -10,7 +10,7 @@
         <table>
             <tr>
                 <td><label for="start-date">Start Date:</label></td>
-                <td><input id="start-date" type="date" name="start-date"></td>
+                <td><input id="start-date" type="date" name="start-date" th:value="${roomSearch.startDate}"></td>
             </tr>
             <tr>
                 <td><label for="end-date">End Date:</label></td>
@@ -31,30 +31,24 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Room Size</th>
+                    <th>Size</th>
                     <th>Beds</th>
-                    <th>Available Extra Beds</th>
+                    <th>Extra Beds</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="room : ${rooms}">
                     <td th:text="${room.name}"></td>
-<!--                    <td th:text="${room.size}"></td>-->
-                    <td th:text="${room.getRoomSize().getSize()}"></td>
-<!--                    <td th:text="${room.extraBeds}"></td>-->
-                    <td>
-                        <label>
-                            <input type="radio" th:field="*{roomId}" th:value="${room.getId()}">
-                        </label>
-                    </td>
+                    <td th:text="${room.roomSize.size}"></td>
+                    <td th:text="${room.roomSize.beds}"></td>
+                    <td th:text="${room.roomSize.maxExtraBeds}"></td>
+                    <td><input type="radio" th:field="*{roomId}" th:value="${room.id}"></td>
                 </tr>
                 </tbody>
             </table>
             <label for="customer">Customer: </label>
             <select id="customer" name="customer" th:field="*{customerId}">
-                <!--  iterate over guests and put guest name in option elements -->
                 <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
-                <option value="none" disabled selected>None</option>
             </select>
             <button type="submit">Book Room</button>
         </form>
