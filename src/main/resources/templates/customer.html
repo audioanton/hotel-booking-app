@@ -26,6 +26,12 @@
             <button type="submit" th:text="${customer.id == null} ? 'Create' : 'Update'"></button>
             <a href="/customers">Back to Customers</a>
         </form>
+
+        <div th:if="${customer.id != null}">
+            <form th:action="@{/customers/{id}/delete(id=${customer.id})}" method="post">
+                <button type="submit" style="background-color: #ff4444; color: white;">Delete</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

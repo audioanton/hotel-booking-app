@@ -59,4 +59,10 @@ public class CustomersController {
         customerService.updateCustomer(customer);
         return "redirect:/customers";
     }
+
+    @PostMapping("/customers/{id}/delete")
+    public String deleteCustomer(@PathVariable("id") Long id) {
+        customerService.deleteCustomer(id);
+        return "redirect:/customers";
+    }
 }

@@ -60,6 +60,11 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
+    public void deleteCustomer(Long id) {
+        customerRepository.deleteById(id);
+    }
+
+    @Override
     public CustomerDto toCustomerDto(Customer customer) {
         return CustomerDto.builder()
                 .id(customer.getId())
