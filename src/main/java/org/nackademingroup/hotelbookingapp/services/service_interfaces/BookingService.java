@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface BookingService {
 
-    public Optional<BookingDto> getBookingById(Long id);
+    public BookingDto getBookingById(Long id);
 
     public Booking updateBooking(Booking booking);
 
