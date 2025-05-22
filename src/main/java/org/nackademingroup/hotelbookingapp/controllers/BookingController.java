@@ -37,4 +37,10 @@ public class BookingController {
             return "booking";
         }
     }
+
+    @PostMapping("/bookings/{id}/cancel")
+    public String cancelBooking(@PathVariable("id") Long id) {
+        bookingService.removeBooking(id);
+        return "redirect:/bookings";
+    }
 }

@@ -15,7 +15,9 @@
     <p th:text="'Extra beds: ' + ${booking.bookingDetails.extraBeds}" />
     <p th:text="'Dates: ' + ${booking.startDate} + ' - ' + ${booking.endDate}" />
 
-    <button type="submit" th:action="@{/edit-booking/cancel(id=${booking.id})}" th:object="${booking}" method="post">Cancel booking</button>
+    <form th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post">
+        <button type="submit">Cancel booking</button>
+    </form>
 
     <h2>Edit booking</h2>
 

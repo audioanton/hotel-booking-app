@@ -60,8 +60,9 @@ public class BookingServiceImp implements BookingService {
         return booking;
     }
 
-    public void removeBooking(Booking booking) {
-
+    @Override
+    public void removeBooking(Long id) {
+        bookingRepository.deleteById(id);
     }
 
     @Override

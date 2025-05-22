@@ -19,7 +19,7 @@ public class BookingDetails {
 
     @ManyToOne
     @JoinColumn
-    @Cascade(CascadeType.ALL)
+    //@Cascade(CascadeType.ALL)
     private Room room;
 
 //    @ManyToOne
