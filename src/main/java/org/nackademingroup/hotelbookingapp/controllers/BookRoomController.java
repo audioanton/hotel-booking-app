@@ -28,18 +28,18 @@ public class BookRoomController {
     @PostMapping("/book-room")
     public String showAvailableRooms(Model model, RoomSearch roomSearch) {
         model.addAttribute("rooms", bookingService.getAvailableRooms(roomSearch));
-        System.out.println(bookingService.getAvailableRooms(roomSearch));
         model.addAttribute(roomSearch);
         model.addAttribute("customers", customerService.getCustomerDtos());
         model.addAttribute("search", true);
         model.addAttribute("roomSearch", roomSearch);
-        model.addAttribute("roomSelection", RoomSelection.builder().build());
+        model.addAttribute("roomSelection", new RoomSelection());
         return "book-room";
     }
 
     @PostMapping("/book-room/selected")
     public String selectRoom(Model model, RoomSelection roomSelection) {
         System.out.println(roomSelection);
+//        bookingService.saveRoomSelection(roomSelection);
         return "redirect:/book-room";
     }
 }

@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Book Room</h1>
-    <form th:action="@{/book-room}" th:object="${roomSearch}" method="post">
+    <form th:if="${!search}" th:action="@{/book-room}" th:object="${roomSearch}" method="post">
         <table>
             <tr>
                 <td><label for="start-date">Start Date:</label></td>
@@ -34,6 +34,9 @@
                     <th>Size</th>
                     <th>Beds</th>
                     <th>Extra Beds</th>
+<!--                    <th>Start Date</th>-->
+<!--                    <th>End Date</th>-->
+<!--                    <th>Guests</th>-->
                 </tr>
                 </thead>
                 <tbody>
@@ -42,10 +45,16 @@
                     <td th:text="${room.roomSize.size}"></td>
                     <td th:text="${room.roomSize.beds}"></td>
                     <td th:text="${room.roomSize.maxExtraBeds}"></td>
+<!--                    <td th:text="${roomSearch.startDate}"></td>-->
+<!--                    <td th:text="${roomSearch.endDate}"></td>-->
+<!--                    <td th:text="${roomSearch.totalGuests}"></td>-->
                     <td><input type="radio" th:field="*{roomId}" th:value="${room.id}"></td>
                 </tr>
                 </tbody>
             </table>
+            <input type="hidden" th:value="${roomSearch.startDate}" name="startDate" id="startDate">
+            <input type="hidden" th:value="${roomSearch.endDate}" name="endDate" id="endDate">
+            <input type="hidden" th:value="${roomSearch.totalGuests}" name="totalGuests" id="totalGuests">
             <table>
                 <tr>
                     <td>
@@ -54,15 +63,6 @@
                             <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
                         </select>
                     </td>
-                </tr>
-                <tr>
-                    <td th:text="'Start date: ' + ${roomSearch.startDate}"></td>
-                </tr>
-                <tr>
-                    <td th:text="'End date: ' + ${roomSearch.endDate}"></td>
-                </tr>
-                <tr>
-                    <td th:text="'Guests: ' + ${roomSearch.totalGuests}"></td>
                 </tr>
                 <tr>
                     <td>
