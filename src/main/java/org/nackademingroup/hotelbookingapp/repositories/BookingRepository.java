@@ -16,4 +16,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     List<Booking> findAllByEndDateBeforeAndStartDateAfter(LocalDate startDate, LocalDate endDate);
 
 //    List<Booking> findAllByBookingPeriodIsNotContaining(Period bookingPeriod);
+
+    List<Booking> findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
+            LocalDate endDate,
+            LocalDate startDate
+    );
 }

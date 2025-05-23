@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -135,7 +136,39 @@ public class BookingServiceImp implements BookingService {
     public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto) {
         System.out.println(roomSearchDto);
         System.out.println(bookingRepository.findAllByEndDateBeforeAndStartDateAfter(roomSearchDto.getStartDate(), roomSearchDto.getEndDate()));
-        return roomService.getRooms();
+        List<Booking> activeBookings = bookingRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                roomSearchDto.getEndDate(),
+                roomSearchDto.getStartDate()
+        );
+        List<RoomDto> rooms = roomService.getRooms();
+
+        List<RoomDto> availableRooms = new ArrayList<>();
+        for (RoomDto room : rooms) {
+            boolean isBooked = activeBookings.stream()
+                    .anyMatch(booking -> Objects.equals(booking.getBookingDetails().getRoom().getId(), room.getId()));
+            int maxBeds = room.getRoomSize().getBeds() + room.getRoomSize().getMaxExtraBeds();
+            boolean hasEnoughBeds = roomSearchDto.getTotalGuests() <= maxBeds;
+            if (!isBooked && hasEnoughBeds) {
+                availableRooms.add(room);
+            }
+        }
+        return availableRooms;
+    }
+
+    @Override
+    public void createBooking(RoomSelectionDto roomSelectionDto) {
+        Booking booking = new Booking();
+        booking.setStartDate(roomSelectionDto.getStartDate());
+        booking.setEndDate(roomSelectionDto.getEndDate());
+        Optional<CustomerDto> customerOpt = customerService.getCustomerDtoById(roomSelectionDto.getCustomerId());
+        customerOpt.ifPresent(customerDto -> booking.setCustomer(customerService.toCustomer(customerDto)));
+
+        BookingDetails bookingDetails = new BookingDetails();
+        bookingDetails.setRoom(roomRepository.findById(roomSelectionDto.getRoomId()).orElse(null));
+        // TODO: Get extra beds by form
+        bookingDetails.setExtraBeds(0);
+        booking.setBookingDetails(bookingDetails);
+        Booking savedBooking = bookingRepository.save(booking);
     }
 
 }

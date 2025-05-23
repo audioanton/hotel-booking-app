@@ -19,7 +19,7 @@
             </tr>
             <tr>
                 <td><label for="total-guests">Total Guests:</label></td>
-                <td><input id="total-guests" th:field="*{totalGuests}" type="number"></td>
+                <td><input id="total-guests" th:value="${roomSearchDto.totalGuests > 0  ? roomSearchDto.totalGuests : 3}" type="number"></td>
             </tr>
         </table><br>
         <button type="submit">Search Rooms</button>

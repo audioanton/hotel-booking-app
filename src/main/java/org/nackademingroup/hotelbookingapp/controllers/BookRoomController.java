@@ -39,6 +39,7 @@ public class BookRoomController {
     @PostMapping("/book-room/selected")
     public String selectRoom(Model model, RoomSelectionDto roomSelectionDto) {
 //        bookingService.saveRoomSelection(roomSelection);
-        return "redirect:/book-room";
+        bookingService.createBooking(roomSelectionDto);
+        return "redirect:/bookings";
     }
 }

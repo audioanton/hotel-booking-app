@@ -83,6 +83,15 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
+    public Customer toCustomer(CustomerDto customerDto) {
+        return Customer.builder()
+                .id(customerDto.getId())
+                .name(customerDto.getName())
+                .phoneNumber(customerDto.getPhoneNumber())
+                .build();
+    }
+
+    @Override
     public List<CustomerDto> getCustomerDtos() {
         List<Customer> customers = customerRepository.findAll();
         List<CustomerDto> customerDtos = new ArrayList<>();

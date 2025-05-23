@@ -61,6 +61,15 @@ public class HotelBookingAppApplication {
                             .build()
             );
             bookingRepository.saveAll(bookings);
+
+            LocalDate start = LocalDate.parse("2025-05-20");
+            LocalDate end = LocalDate.parse("2025-05-26");
+
+            bookingRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                    end,
+                    start
+            ).forEach(System.out::println);
+//            bookingRepository.findAllByEndDateBeforeAndStartDateAfter(start, end)
         };
     }
 

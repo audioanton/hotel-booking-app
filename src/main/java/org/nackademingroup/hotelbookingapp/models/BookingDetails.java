@@ -22,8 +22,7 @@ public class BookingDetails {
     //@Cascade(CascadeType.ALL)
     private Room room;
 
-//    @ManyToOne
-//    @JoinColumn
+//    @OneToOne
 //    private Booking booking;
 
     private int extraBeds;

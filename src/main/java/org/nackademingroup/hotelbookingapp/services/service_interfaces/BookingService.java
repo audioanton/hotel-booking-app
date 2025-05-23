@@ -23,4 +23,6 @@ public interface BookingService {
     public List<BookingDto> getBookings();
 
     public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto);
+
+    public void createBooking(RoomSelectionDto roomSelectionDto);
 }

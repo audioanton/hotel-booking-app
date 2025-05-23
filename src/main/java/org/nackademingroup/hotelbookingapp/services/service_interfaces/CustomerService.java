@@ -12,6 +12,7 @@ public interface CustomerService {
     public Customer updateCustomer(Customer customer);
 
     public CustomerDto toCustomerDto(Customer customer);
+    public Customer toCustomer(CustomerDto customerDto);
 
     public List<CustomerDto> getCustomerDtos();
 
