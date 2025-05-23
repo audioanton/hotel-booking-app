@@ -29,7 +29,7 @@ public class Booking {
     @Temporal(TemporalType.DATE)
     private LocalDate endDate;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
 //    @Cascade(CascadeType.ALL)
     private Customer customer;

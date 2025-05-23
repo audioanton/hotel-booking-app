@@ -53,7 +53,7 @@
             <input type="hidden" th:value="${roomSearchDto.endDate}" name="endDate" id="endDate">
             <input type="hidden" th:value="${roomSearchDto.totalGuests}" name="totalGuests" id="totalGuests">
             <label for="customer">Customer:</label>
-            <select id="customer" name="customer" th:field="*{customerId}">
+            <select id="customer" name="customer" th:field="*{customerId}" th:value="${customers.get(0).id}">
                 <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
             </select>
             <button type="submit">Book Room</button>
