@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Book Room</h1>
-    <form th:if="${!search}" th:action="@{/book-room}" th:object="${roomSearch}" method="post">
+    <form th:action="@{/book-room}" th:object="${roomSearchDto}" method="post">
         <table>
             <tr>
                 <td><label for="start-date">Start Date:</label></td>
@@ -26,7 +26,7 @@
     <div th:if="${search}">
         <p th:if="${rooms.isEmpty()}">No vacancies found</p>
         <h3>Available Rooms</h3>
-        <form th:action="@{/book-room/selected}" th:method="post" th:object="${roomSelection}">
+        <form th:action="@{/book-room/selected}" th:method="post" th:object="${roomSelectionDto}">
             <table>
                 <thead>
                 <tr>
@@ -45,16 +45,16 @@
                     <td th:text="${room.roomSize.size}"></td>
                     <td th:text="${room.roomSize.beds}"></td>
                     <td th:text="${room.roomSize.maxExtraBeds}"></td>
-<!--                    <td th:text="${roomSearch.startDate}"></td>-->
-<!--                    <td th:text="${roomSearch.endDate}"></td>-->
-<!--                    <td th:text="${roomSearch.totalGuests}"></td>-->
+<!--                    <td th:text="${roomSearchDto.startDate}"></td>-->
+<!--                    <td th:text="${roomSearchDto.endDate}"></td>-->
+<!--                    <td th:text="${roomSearchDto.totalGuests}"></td>-->
                     <td><input type="radio" th:field="*{roomId}" th:value="${room.id}"></td>
                 </tr>
                 </tbody>
             </table>
-            <input type="hidden" th:value="${roomSearch.startDate}" name="startDate" id="startDate">
-            <input type="hidden" th:value="${roomSearch.endDate}" name="endDate" id="endDate">
-            <input type="hidden" th:value="${roomSearch.totalGuests}" name="totalGuests" id="totalGuests">
+            <input type="hidden" th:value="${roomSearchDto.startDate}" name="startDate" id="startDate">
+            <input type="hidden" th:value="${roomSearchDto.endDate}" name="endDate" id="endDate">
+            <input type="hidden" th:value="${roomSearchDto.totalGuests}" name="totalGuests" id="totalGuests">
             <table>
                 <tr>
                     <td>
