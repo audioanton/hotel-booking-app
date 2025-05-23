@@ -8,6 +8,7 @@ import org.nackademingroup.hotelbookingapp.services.service_interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -80,6 +81,27 @@ public class BookingServiceImp implements BookingService {
         });
     }
 
+    @Override
+    public void updateBookingDates(Long id, BookingDto updatedBooking) {
+        bookingRepository.findById(id)
+                .map(booking -> {
+                    validateDates(updatedBooking.getStartDate(), updatedBooking.getEndDate());
+                    booking.setStartDate(updatedBooking.getStartDate());
+                    booking.setEndDate(updatedBooking.getEndDate());
+                    return bookingRepository.save(booking);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + id));
+    }
+
+    private void validateDates(LocalDate startDate, LocalDate endDate) {
+    //ToDo: Add checks if room is available here, or use an existing method?
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Start date cannot be in the past");
+        }
+    }
 
     @Override
     public BookingDto toBookingDto(Booking booking, BookingDetailsDto details, CustomerDto customer) {

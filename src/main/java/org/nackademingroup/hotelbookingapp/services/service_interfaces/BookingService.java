@@ -14,6 +14,8 @@ public interface BookingService {
 
     public void updateBookingExtraBeds(Long id, Booking booking);
 
+    public void updateBookingDates(Long id, BookingDto booking);
+
     public void removeBooking(Long id);
 
     public BookingDto toBookingDto(Booking booking, BookingDetailsDto details, CustomerDto customer);

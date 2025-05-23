@@ -27,24 +27,26 @@
             <input type="number" name="extraBeds" th:field="*{bookingDetails.extraBeds}"/>
             <button type="submit">Save</button>
         </div>
-        <div th:if="${errorMessage}" class="error-message" style="color: red;" th:text="${errorMessage}"></div>
-        <div th:if="${successMessage}" class="success-message" style="color: green;" th:text="${successMessage}"></div>
+        <div th:if="${errorMessageExtraBeds}" class="error-message" style="color: red;" th:text="${errorMessageExtraBeds}"></div>
+        <div th:if="${successMessageExtraBeds}" class="success-message" style="color: green;" th:text="${successMessageExtraBeds}"></div>
     </form>
     <br>
-    <form th:action="@{/edit-booking/change-dates(id=${booking.id})}" th:object="${booking}" method="post">
+    <form th:action="@{/bookings/{id}/edit/dates(id=${booking.id})}" th:object="${booking}" method="post">
         <div class="form-group">
             <label for="start-date">Start Date:</label>
             <input id="start-date"
                    type="date"
                    th:value="${#temporals.format(booking.startDate, 'yyyy-MM-dd')}"
-                   name="start-date">
+                   name="startDate">
             <label for="end-date">End Date:</label>
             <input id="end-date"
                    type="date"
                    th:value="${#temporals.format(booking.endDate, 'yyyy-MM-dd')}"
-                   name="end-date">
+                   name="endDate">
             <button type="submit">Save</button>
         </div>
+        <div th:if="${errorMessageDates}" class="error-message" style="color: red;" th:text="${errorMessageDates}"></div>
+        <div th:if="${successMessageDates}" class="success-message" style="color: green;" th:text="${successMessageDates}"></div>
     </form>
     <br>
     <p>Possible ToDo:</p>
