@@ -4,6 +4,7 @@ import org.nackademingroup.hotelbookingapp.dto.*;
 import org.nackademingroup.hotelbookingapp.models.Booking;
 import org.nackademingroup.hotelbookingapp.models.BookingDetails;
 import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
+import org.nackademingroup.hotelbookingapp.repositories.RoomRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,10 @@ public class BookingServiceImp implements BookingService {
     private BookingDetailsService bookingDetailsService;
     @Autowired
     private CustomerService customerService;
+//    @Autowired
+//    private BookingService bookingService;
+    @Autowired
+    private RoomRepository roomRepository;
 
     public List<BookingDto> getMockBookings() {
 
@@ -128,6 +133,8 @@ public class BookingServiceImp implements BookingService {
 
     @Override
     public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto) {
+        System.out.println(roomSearchDto);
+        System.out.println(bookingRepository.findAllByEndDateBeforeAndStartDateAfter(roomSearchDto.getStartDate(), roomSearchDto.getEndDate()));
         return roomService.getRooms();
     }
 
