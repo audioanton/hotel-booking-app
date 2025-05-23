@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImp implements BookingService {
@@ -91,6 +92,7 @@ public class BookingServiceImp implements BookingService {
         bookingRepository.findById(id)
                 .map(booking -> {
                     validateDates(updatedBooking.getStartDate(), updatedBooking.getEndDate());
+                    validateAvailability(id, updatedBooking.getStartDate(), updatedBooking.getEndDate(), booking.getBookingDetails().getRoom().getId());
                     booking.setStartDate(updatedBooking.getStartDate());
                     booking.setEndDate(updatedBooking.getEndDate());
                     return bookingRepository.save(booking);
@@ -99,7 +101,6 @@ public class BookingServiceImp implements BookingService {
     }
 
     private void validateDates(LocalDate startDate, LocalDate endDate) {
-    //ToDo: Add checks if room is available here, or use an existing method?
         if (startDate == null || endDate == null)
             throw new IllegalArgumentException("Please enter both start and end date");
         if (startDate.isAfter(endDate)) {
@@ -107,6 +108,23 @@ public class BookingServiceImp implements BookingService {
         }
         if (startDate.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Start date cannot be in the past");
+        }
+    }
+
+    private void validateAvailability(Long id, LocalDate startDate, LocalDate endDate, Long roomId) {
+        List<Booking> activeBookings = bookingRepository
+                .findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                        endDate.minusDays(1),
+                        startDate.plusDays(1))
+                .stream()
+                .filter(booking -> !Objects.equals(booking.getId(), id))
+                .toList();
+        boolean isBooked = activeBookings.stream()
+                .anyMatch(booking -> Objects.equals(booking.getBookingDetails()
+                        .getRoom()
+                        .getId(), roomId));
+        if (isBooked) {
+            throw new IllegalArgumentException("Room is not available for the selected dates");
         }
     }
 
@@ -140,8 +158,8 @@ public class BookingServiceImp implements BookingService {
         System.out.println(roomSearchDto);
         System.out.println(bookingRepository.findAllByEndDateBeforeAndStartDateAfter(roomSearchDto.getStartDate(), roomSearchDto.getEndDate()));
         List<Booking> activeBookings = bookingRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
-                roomSearchDto.getEndDate(),
-                roomSearchDto.getStartDate()
+                roomSearchDto.getEndDate().minusDays(1),
+                roomSearchDto.getStartDate().plusDays(1)
         );
         List<RoomDto> rooms = roomService.getRooms();
 
