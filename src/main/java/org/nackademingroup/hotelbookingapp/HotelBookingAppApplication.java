@@ -50,29 +50,21 @@ public class HotelBookingAppApplication {
             customerRepository.saveAll(customers);
 
             List<BookingDetails> bookingDetails = List.of(
-                    BookingDetails.builder().room(rooms.get(0)).extraBeds(2).build(),
+                    BookingDetails.builder().room(rooms.get(0)).extraBeds(0).build(),
                     BookingDetails.builder().room(rooms.get(1)).extraBeds(1).build(),
-                    BookingDetails.builder().room(rooms.get(0)).extraBeds(2).build()
+                    BookingDetails.builder().room(rooms.get(2)).extraBeds(2).build()
             );
 
             List<Booking> bookings = List.of(
                     Booking.builder()
-                            .startDate(LocalDate.parse("2025-05-20"))
-                            .endDate(LocalDate.parse("2025-05-25"))
+                            .startDate(LocalDate.parse("2025-05-30"))
+                            .endDate(LocalDate.parse("2025-05-31"))
                             .customer(customers.get(0))
                             .bookingDetails(bookingDetails.get(0))
                             .build()
             );
             bookingRepository.saveAll(bookings);
 
-            LocalDate start = LocalDate.parse("2025-05-20");
-            LocalDate end = LocalDate.parse("2025-05-26");
-
-            bookingRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
-                    end,
-                    start
-            ).forEach(System.out::println);
-//            bookingRepository.findAllByEndDateBeforeAndStartDateAfter(start, end)
         };
     }
 
