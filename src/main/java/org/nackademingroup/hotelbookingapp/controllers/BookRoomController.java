@@ -1,5 +1,6 @@
 package org.nackademingroup.hotelbookingapp.controllers;
 
+import org.nackademingroup.hotelbookingapp.dto.BookingDto;
 import org.nackademingroup.hotelbookingapp.dto.RoomSearchDto;
 import org.nackademingroup.hotelbookingapp.dto.RoomSelectionDto;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.BookingService;
@@ -21,24 +22,33 @@ public class BookRoomController {
     @GetMapping("/book-room")
     public String showBookRoom(Model model) {
         model.addAttribute(RoomSearchDto.builder().build());
+        model.addAttribute("errorMessage", "");
         model.addAttribute("search", false);
         return "book-room";
     }
 
     @PostMapping("/book-room")
     public String showAvailableRooms(Model model, RoomSearchDto roomSearchDto) {
-        model.addAttribute("rooms", bookingService.getAvailableRooms(roomSearchDto));
-        model.addAttribute(roomSearchDto);
-        model.addAttribute("customers", customerService.getCustomerDtos());
-        model.addAttribute("search", true);
-        model.addAttribute("roomSearchDto", roomSearchDto);
-        model.addAttribute("roomSelectionDto", new RoomSelectionDto());
-        return "book-room";
+        try {
+            model.addAttribute("rooms", bookingService.getAvailableRooms(roomSearchDto));
+            model.addAttribute("errorMessage", "");
+            model.addAttribute(roomSearchDto);
+            model.addAttribute("customers", customerService.getCustomerDtos());
+            model.addAttribute("search", true);
+            model.addAttribute("roomSearchDto", roomSearchDto);
+            model.addAttribute("roomSelectionDto", new RoomSelectionDto());
+            return "book-room";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "book-room";
+        }
     }
 
     @PostMapping("/book-room/selected")
     public String selectRoom(Model model, RoomSelectionDto roomSelectionDto) {
 //        bookingService.saveRoomSelection(roomSelection);
+        System.out.println(roomSelectionDto);
+        model.addAttribute("errorMessage", "");
         bookingService.createBooking(roomSelectionDto);
         return "redirect:/bookings";
     }

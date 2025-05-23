@@ -101,6 +101,8 @@ public class BookingServiceImp implements BookingService {
     }
 
     private void validateDates(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null || endDate == null)
+            throw new IllegalArgumentException("Please enter both start and end date");
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date");
         }
@@ -152,6 +154,7 @@ public class BookingServiceImp implements BookingService {
 
     @Override
     public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto) {
+        validateDates(roomSearchDto.getStartDate(), roomSearchDto.getEndDate());
         System.out.println(roomSearchDto);
         System.out.println(bookingRepository.findAllByEndDateBeforeAndStartDateAfter(roomSearchDto.getStartDate(), roomSearchDto.getEndDate()));
         List<Booking> activeBookings = bookingRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
@@ -183,10 +186,13 @@ public class BookingServiceImp implements BookingService {
 
         BookingDetails bookingDetails = new BookingDetails();
         bookingDetails.setRoom(roomRepository.findById(roomSelectionDto.getRoomId()).orElse(null));
-        // TODO: Get extra beds by form
-        bookingDetails.setExtraBeds(0);
+        bookingDetails.setExtraBeds(getExtraBedsForBooking(bookingDetails, roomSelectionDto));
         booking.setBookingDetails(bookingDetails);
         Booking savedBooking = bookingRepository.save(booking);
+    }
+
+    private int getExtraBedsForBooking(BookingDetails bookingDetails, RoomSelectionDto roomSelectionDto) {
+        return roomSelectionDto.getTotalGuests() - bookingDetails.getRoom().getRoomsize().getBeds();
     }
 
 }
