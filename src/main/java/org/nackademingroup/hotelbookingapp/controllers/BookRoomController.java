@@ -44,19 +44,6 @@ public class BookRoomController {
         }
     }
 
-//    try {
-//        bookingService.updateBookingExtraBeds(id, booking);
-//        BookingDto updatedBooking = bookingService.getBookingById(id);
-//        model.addAttribute("booking", updatedBooking);
-//        model.addAttribute("successMessageExtraBeds", "Extra beds updated successfully");
-//        return "booking";
-//    } catch (IllegalArgumentException e) {
-//        BookingDto currentBooking = bookingService.getBookingById(id);
-//        model.addAttribute("booking", currentBooking);
-//        model.addAttribute("errorMessageExtraBeds", e.getMessage());
-//        return "booking";
-//    }
-
     @PostMapping("/book-room/selected")
     public String selectRoom(Model model, RoomSelectionDto roomSelectionDto) {
 //        bookingService.saveRoomSelection(roomSelection);
