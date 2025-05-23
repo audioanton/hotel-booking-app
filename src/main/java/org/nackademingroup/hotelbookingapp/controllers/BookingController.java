@@ -27,13 +27,53 @@ public class BookingController {
 
     @GetMapping("/bookings/{id}")
     public String getBooking(@PathVariable("id") Long id, Model model) {
-        Optional<BookingDto> bookingOpt = bookingService.getBookingById(id);
+        BookingDto booking = bookingService.getBookingById(id);
 
-        if (bookingOpt.isPresent()) {
-            model.addAttribute("booking", bookingOpt.get());
-            return "booking";
-        } else {
+        if (booking == null) {
             return "redirect:/bookings";
+        } else {
+            model.addAttribute("booking", booking);
+            model.addAttribute("search", false);
+            return "booking";
         }
     }
+
+    @PostMapping("/bookings/{id}/cancel")
+    public String cancelBooking(@PathVariable("id") Long id) {
+        bookingService.removeBooking(id);
+        return "redirect:/bookings";
+    }
+
+    @PostMapping("/bookings/{id}/edit/extra-beds")
+    public String editExtraBeds(@PathVariable("id") Long id, Booking booking, Model model) {
+        try {
+            bookingService.updateBookingExtraBeds(id, booking);
+            BookingDto updatedBooking = bookingService.getBookingById(id);
+            model.addAttribute("booking", updatedBooking);
+            model.addAttribute("successMessageExtraBeds", "Extra beds updated successfully");
+            return "booking";
+        } catch (IllegalArgumentException e) {
+            BookingDto currentBooking = bookingService.getBookingById(id);
+            model.addAttribute("booking", currentBooking);
+            model.addAttribute("errorMessageExtraBeds", e.getMessage());
+            return "booking";
+        }
+    }
+
+    @PostMapping("/bookings/{id}/edit/dates")
+    public String editDates(@PathVariable("id") Long id, BookingDto bookingDto, Model model) {
+        try {
+            bookingService.updateBookingDates(id, bookingDto);
+            BookingDto updatedBooking = bookingService.getBookingById(id);
+            model.addAttribute("booking", updatedBooking);
+            model.addAttribute("successMessageDates", "Dates updated successfully");
+            return "booking";
+        } catch (IllegalArgumentException e) {
+            BookingDto currentBooking = bookingService.getBookingById(id);
+            model.addAttribute("booking", currentBooking);
+            model.addAttribute("errorMessageDates", e.getMessage());
+            return "booking";
+        }
+    }
+
 }

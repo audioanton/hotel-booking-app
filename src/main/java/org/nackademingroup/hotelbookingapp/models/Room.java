@@ -21,6 +21,6 @@ public class Room {
 
     @ManyToOne
     @JoinColumn
-    @Cascade(CascadeType.ALL)
+    //@Cascade(CascadeType.ALL)
     private RoomSize roomsize;
 }

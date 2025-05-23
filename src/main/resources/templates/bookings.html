@@ -9,8 +9,6 @@
 
     <div>
         <h1>Bookings</h1>
-        <p>Mockup data is inserted from the booking model only (dates and id). The rest is hard coded since it needs to be joined from other models.</p>
-
         <div th:if="${bookings.isEmpty()}">No bookings found</div>
         <table th:if="${!bookings.isEmpty()}">
             <thead>

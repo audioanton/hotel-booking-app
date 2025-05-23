@@ -8,11 +8,15 @@ import java.util.Optional;
 
 public interface BookingService {
 
-    public Optional<BookingDto> getBookingById(Long id);
+    public BookingDto getBookingById(Long id);
 
     public Booking updateBooking(Booking booking);
 
-    public void removeBooking(Booking booking);
+    public void updateBookingExtraBeds(Long id, Booking booking);
+
+    public void updateBookingDates(Long id, BookingDto booking);
+
+    public void removeBooking(Long id);
 
     public BookingDto toBookingDto(Booking booking, BookingDetailsDto details, CustomerDto customer);
 

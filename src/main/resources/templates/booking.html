@@ -7,33 +7,59 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 <div>
-    <h1>Edit Booking</h1>
+    <h1>Booking details</h1>
+    <p th:text="'Booking id: ' + ${booking.id}" />
+    <p th:text="'Guest name: ' + ${booking.customer.name}" />
+    <p th:text="'Room name: ' + ${booking.bookingDetails.room.name}" />
+    <p th:text="'Room size: ' + ${booking.bookingDetails.room.roomSize.size}" />
+    <p th:text="'Extra beds: ' + ${booking.bookingDetails.extraBeds}" />
+    <p th:text="'Dates: ' + ${booking.startDate} + ' - ' + ${booking.endDate}" />
+
+    <form th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post">
+        <button type="submit" style="background-color: #ff4444; color: white;">Cancel booking</button>
+    </form>
+
+    <h2>Edit booking</h2>
+
+    <form th:action="@{/bookings/{id}/edit/extra-beds(id=${booking.id})}" th:object="${booking}" method="post">
+        <div class="form-group">
+            <label>Extra beds:</label>
+            <input type="number" name="extraBeds" th:field="*{bookingDetails.extraBeds}"/>
+            <button type="submit">Save</button>
+        </div>
+        <div th:if="${errorMessageExtraBeds}" class="error-message" style="color: red;" th:text="${errorMessageExtraBeds}"></div>
+        <div th:if="${successMessageExtraBeds}" class="success-message" style="color: green;" th:text="${successMessageExtraBeds}"></div>
+    </form>
+    <br>
+    <form th:action="@{/bookings/{id}/edit/dates(id=${booking.id})}" th:object="${booking}" method="post">
+        <div class="form-group">
+            <label for="start-date">Start Date:</label>
+            <input id="start-date"
+                   type="date"
+                   th:value="${#temporals.format(booking.startDate, 'yyyy-MM-dd')}"
+                   name="startDate">
+            <label for="end-date">End Date:</label>
+            <input id="end-date"
+                   type="date"
+                   th:value="${#temporals.format(booking.endDate, 'yyyy-MM-dd')}"
+                   name="endDate">
+            <button type="submit">Save</button>
+        </div>
+        <div th:if="${errorMessageDates}" class="error-message" style="color: red;" th:text="${errorMessageDates}"></div>
+        <div th:if="${successMessageDates}" class="success-message" style="color: green;" th:text="${successMessageDates}"></div>
+    </form>
+    <br>
+    <p>Possible ToDo:</p>
+    <button type="submit"
+            th:action="@{/edit-booking/change-details-todo(id=${booking.id})}"
+            th:object="${booking}"
+            method="post">Search alternatives</button>
+    <br>
+    <br>
+    <a href="/bookings">← Back to bookings</a>
 
     <div th:if="${successMessage}" th:text="${successMessage}"></div>
 
-    <form th:action="@{/bookings}" th:object="${booking}" method="post">
-        <div>
-            <h2>Non modifiable details</h2>
-            <p th:text="'Booking id: ' + ${booking.id}"></p>
-            <p>Room name: Name 1</p>
-            <p>Size: Medium</p>
-        </div>
-        <div class="form-group">
-            <h2>Modifiable details</h2>
-            <label for="start-date">Start Date:</label>
-            <input id="start-date" type="date" name="start-date">
-            <label for="end-date">End Date:</label>
-            <input id="end-date" type="date" name="end-date">
-        </div>
-        <div class="form-group">
-            <label>Extra beds:</label>
-            <input type="number"/>
-        </div>
-
-        <button type="submit">Save</button>
-        <button type="submit">Remove</button>
-        <a href="/bookings">Back</a>
-    </form>
 </div>
 </body>
 </html>

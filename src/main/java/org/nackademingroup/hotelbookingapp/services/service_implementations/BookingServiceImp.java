@@ -2,6 +2,7 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 
 import org.nackademingroup.hotelbookingapp.dto.*;
 import org.nackademingroup.hotelbookingapp.models.Booking;
+import org.nackademingroup.hotelbookingapp.models.BookingDetails;
 import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,18 +43,64 @@ public class BookingServiceImp implements BookingService {
         return mockBookings;
     }
 
-    public Optional<BookingDto> getBookingById(Long id) {
-        return getMockBookings().stream()
-                .filter(booking -> booking.getId().equals(id))
-                .findFirst();
+    //ToDo: Break duplicate code into function (the mapping of a booking to a bookingDto)
+
+    public BookingDto getBookingById(Long id) {
+        Optional<Booking> booking = bookingRepository.findById(id);
+
+        return booking.map(b -> {
+            RoomSizeDto roomSize = roomSizeService.toRoomSizeDto(b.getBookingDetails().getRoom().getRoomsize());
+            RoomDto room = roomService.toRoomDto(b.getBookingDetails().getRoom(), roomSize);
+            BookingDetailsDto detailsDto = bookingDetailsService.toBookingDetailsDto(b.getBookingDetails(), room);
+            CustomerDto customerDto = customerService.toCustomerDto(b.getCustomer());
+            return toBookingDto(b, detailsDto, customerDto);
+        }).orElse(null);
     }
 
     public Booking updateBooking(Booking booking) {
         return booking;
     }
 
-    public void removeBooking(Booking booking) {
+    @Override
+    public void removeBooking(Long id) {
+        bookingRepository.deleteById(id);
+    }
 
+    @Override
+    public void updateBookingExtraBeds(Long id, Booking updatedBooking) {
+        bookingRepository.findById(id).ifPresent(b -> {
+            BookingDetails currentBooking = b.getBookingDetails();
+            int maxExtraBeds = currentBooking.getRoom().getRoomsize().getMaxExtraBeds();
+
+            if (updatedBooking.getBookingDetails().getExtraBeds() <= maxExtraBeds) {
+                currentBooking.setExtraBeds(updatedBooking.getBookingDetails().getExtraBeds());
+                bookingRepository.save(b);
+            } else {
+                throw new IllegalArgumentException("Extra beds cannot exceed the maximum allowed (" + maxExtraBeds + ")");
+            }
+        });
+    }
+
+    @Override
+    public void updateBookingDates(Long id, BookingDto updatedBooking) {
+        bookingRepository.findById(id)
+                .map(booking -> {
+                    validateDates(updatedBooking.getStartDate(), updatedBooking.getEndDate());
+                    booking.setStartDate(updatedBooking.getStartDate());
+                    booking.setEndDate(updatedBooking.getEndDate());
+                    return bookingRepository.save(booking);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + id));
+    }
+
+    private void validateDates(LocalDate startDate, LocalDate endDate) {
+    //ToDo: Add checks if room is available here, or use an existing method?
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
+        if (startDate.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Start date cannot be in the past");
+        }
     }
 
     @Override
