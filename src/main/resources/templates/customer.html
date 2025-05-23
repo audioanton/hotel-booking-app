@@ -3,25 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${customer.id == null} ? 'Add New Customer' : 'Edit Customer'">Customer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+        .container {
+            padding: 0 2em;
+        }
+        .form-group {
+            margin-bottom: 1em;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        input.error {
+            border-color: #ff0000;
+            background-color: #ffe6e6;
+        }
+        .error-message {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: 0.25em;
+        }
+        .success-message {
+            color: #008000;
+            margin-bottom: 1em;
+            padding: 10px;
+            background-color: #e6ffe6;
+            border: 1px solid #00cc00;
+            border-radius: 4px;
+        }
+        .general-error {
+            color: #ff0000;
+            margin-bottom: 1em;
+            padding: 10px;
+            background-color: #ffe6e6;
+            border: 1px solid #ff0000;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button.delete {
+            background-color: #ff4444;
+        }
+        button.delete:hover {
+            background-color: #cc0000;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
-    <div>
+    
+    <div class="container">
         <h1 th:text="${customer.id == null} ? 'Add New Customer' : 'Edit Customer'">Customer</h1>
 
-        <div th:if="${successMessage}" th:text="${successMessage}" style="color: green;"></div>
-        <div th:if="${error}" th:text="${error}" style="color: red; margin-bottom: 1em;"></div>
+        <div th:if="${successMessage}" th:text="${successMessage}" class="success-message"></div>
+        <div th:if="${error}" th:text="${error}" class="general-error"></div>
 
         <form th:action="${customer.id == null} ? @{/customers/create} : @{/customers/{id}(id=${customer.id})}"
               th:object="${customer}" method="post">
+            
             <div class="form-group">
                 <label for="name">Name:</label>
-                <input type="text" id="name" th:field="*{name}" required />
+                <input type="text" id="name" th:field="*{name}" 
+                       th:class="${#fields.hasErrors('name')} ? 'error' : ''" 
+                       required />
+                <div th:if="${#fields.hasErrors('name')}" class="error-message">
+                    <span th:each="error : ${#fields.errors('name')}" th:text="${error}"></span>
+                </div>
             </div>
 
             <div class="form-group">
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required />
+                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" 
+                       th:class="${#fields.hasErrors('phoneNumber')} ? 'error' : ''" />
+                <div th:if="${#fields.hasErrors('phoneNumber')}" class="error-message">
+                    <span th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}"></span>
+                </div>
             </div>
 
             <button type="submit" th:text="${customer.id == null} ? 'Create' : 'Update'"></button>
@@ -29,8 +115,8 @@
         </form>
 
         <div th:if="${customer.id != null}">
-            <form th:action="@{/customers/{id}/delete(id=${customer.id})}" method="post">
-                <button type="submit" style="background-color: #ff4444; color: white;">Delete</button>
+            <form th:action="@{/customers/{id}/delete(id=${customer.id})}" method="post" style="margin-top: 2em;">
+                <button type="submit" class="delete">Delete Customer</button>
             </form>
         </div>
     </div>

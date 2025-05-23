@@ -6,11 +6,15 @@ import org.nackademingroup.hotelbookingapp.services.service_implementations.Cust
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.validation.Valid;
+
+import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,17 +52,30 @@ public class CustomersController {
     }
 
     @PostMapping("/customers/create")
-    public String createCustomer(Customer customer) {
-        customerService.createCustomer(customer);
-        return "redirect:/customers";
+    public String createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+            model.addAttribute("customer", customerDto);
+            return "redirect:/customers/new";
+        } else {
+            customerService.createCustomer(customerService.toCustomer(customerDto));
+            return "redirect:/customers";
+        }
     }
 
     @PostMapping("/customers/{id}")
-    public String updateCustomer(@PathVariable("id") Long id, Customer customer) {
-        // TODO: Validation?
-        customer.setId(id);
-        customerService.updateCustomer(customer);
-        return "redirect:/customers";
+    public String updateCustomer(@PathVariable("id") Long id, @Valid CustomerDto customerDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            customerDto.setId(id);
+            redirectAttributes.addFlashAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+            model.addAttribute("customer", customerDto);
+            return "redirect:/customers/" + id;
+        } else {
+            Customer customer = customerService.toCustomer(customerDto);
+            customer.setId(id);
+            customerService.updateCustomer(customer);
+            return "redirect:/customers";
+        }
     }
 
     @PostMapping("/customers/{id}/delete")
