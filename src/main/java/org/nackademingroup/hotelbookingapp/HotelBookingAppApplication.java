@@ -29,13 +29,16 @@ public class HotelBookingAppApplication {
             roomSizeRepository.deleteAll();
 
             List<RoomSize> roomSizes = List.of(
-                    RoomSize.builder().size("Large").beds(4).maxExtraBeds(2).build()
+                    RoomSize.builder().size("Small").beds(1).maxExtraBeds(0).build(),
+                    RoomSize.builder().size("Medium").beds(2).maxExtraBeds(1).build(),
+                    RoomSize.builder().size("Large").beds(2).maxExtraBeds(2).build()
             );
             roomSizeRepository.saveAll(roomSizes);
 
             List<Room> rooms = List.of(
-                    Room.builder().name("The suit").roomsize(roomSizes.get(0)).build(),
-                    Room.builder().name("The scrub").roomsize(roomSizes.get(0)).build()
+                    Room.builder().name("The scrub").roomsize(roomSizes.get(0)).build(),
+                    Room.builder().name("The standard").roomsize(roomSizes.get(1)).build(),
+                    Room.builder().name("The suit").roomsize(roomSizes.get(2)).build()
             );
             roomRepository.saveAll(rooms);
 
@@ -61,6 +64,15 @@ public class HotelBookingAppApplication {
                             .build()
             );
             bookingRepository.saveAll(bookings);
+
+            LocalDate start = LocalDate.parse("2025-05-20");
+            LocalDate end = LocalDate.parse("2025-05-26");
+
+            bookingRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                    end,
+                    start
+            ).forEach(System.out::println);
+//            bookingRepository.findAllByEndDateBeforeAndStartDateAfter(start, end)
         };
     }
 

@@ -4,12 +4,14 @@ import org.nackademingroup.hotelbookingapp.dto.*;
 import org.nackademingroup.hotelbookingapp.models.Booking;
 import org.nackademingroup.hotelbookingapp.models.BookingDetails;
 import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
+import org.nackademingroup.hotelbookingapp.repositories.RoomRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,10 @@ public class BookingServiceImp implements BookingService {
     private BookingDetailsService bookingDetailsService;
     @Autowired
     private CustomerService customerService;
+//    @Autowired
+//    private BookingService bookingService;
+    @Autowired
+    private RoomRepository roomRepository;
 
     public List<BookingDto> getMockBookings() {
 
@@ -94,6 +100,8 @@ public class BookingServiceImp implements BookingService {
 
     private void validateDates(LocalDate startDate, LocalDate endDate) {
     //ToDo: Add checks if room is available here, or use an existing method?
+        if (startDate == null || endDate == null)
+            throw new IllegalArgumentException("Please enter both start and end date");
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start date cannot be after end date");
         }
@@ -128,7 +136,45 @@ public class BookingServiceImp implements BookingService {
 
     @Override
     public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto) {
-        return roomService.getRooms();
+        validateDates(roomSearchDto.getStartDate(), roomSearchDto.getEndDate());
+        System.out.println(roomSearchDto);
+        System.out.println(bookingRepository.findAllByEndDateBeforeAndStartDateAfter(roomSearchDto.getStartDate(), roomSearchDto.getEndDate()));
+        List<Booking> activeBookings = bookingRepository.findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
+                roomSearchDto.getEndDate(),
+                roomSearchDto.getStartDate()
+        );
+        List<RoomDto> rooms = roomService.getRooms();
+
+        List<RoomDto> availableRooms = new ArrayList<>();
+        for (RoomDto room : rooms) {
+            boolean isBooked = activeBookings.stream()
+                    .anyMatch(booking -> Objects.equals(booking.getBookingDetails().getRoom().getId(), room.getId()));
+            int maxBeds = room.getRoomSize().getBeds() + room.getRoomSize().getMaxExtraBeds();
+            boolean hasEnoughBeds = roomSearchDto.getTotalGuests() <= maxBeds;
+            if (!isBooked && hasEnoughBeds) {
+                availableRooms.add(room);
+            }
+        }
+        return availableRooms;
+    }
+
+    @Override
+    public void createBooking(RoomSelectionDto roomSelectionDto) {
+        Booking booking = new Booking();
+        booking.setStartDate(roomSelectionDto.getStartDate());
+        booking.setEndDate(roomSelectionDto.getEndDate());
+        Optional<CustomerDto> customerOpt = customerService.getCustomerDtoById(roomSelectionDto.getCustomerId());
+        customerOpt.ifPresent(customerDto -> booking.setCustomer(customerService.toCustomer(customerDto)));
+
+        BookingDetails bookingDetails = new BookingDetails();
+        bookingDetails.setRoom(roomRepository.findById(roomSelectionDto.getRoomId()).orElse(null));
+        bookingDetails.setExtraBeds(getExtraBedsForBooking(bookingDetails, roomSelectionDto));
+        booking.setBookingDetails(bookingDetails);
+        Booking savedBooking = bookingRepository.save(booking);
+    }
+
+    private int getExtraBedsForBooking(BookingDetails bookingDetails, RoomSelectionDto roomSelectionDto) {
+        return roomSelectionDto.getTotalGuests() - bookingDetails.getRoom().getRoomsize().getBeds();
     }
 
 }

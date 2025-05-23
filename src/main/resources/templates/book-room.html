@@ -5,6 +5,7 @@
     <title>Book Room</title>
 </head>
 <body>
+    <div th:replace="fragments/header :: header"></div>
     <h1>Book Room</h1>
     <form th:action="@{/book-room}" th:object="${roomSearchDto}" method="post">
         <table>
@@ -18,58 +19,47 @@
             </tr>
             <tr>
                 <td><label for="total-guests">Total Guests:</label></td>
-                <td><input id="total-guests" th:field="*{totalGuests}" type="number"></td>
+                <td><input id="total-guests" name="totalGuests" th:value="${roomSearchDto.totalGuests > 0  ? roomSearchDto.totalGuests : 2}" type="number"></td>
             </tr>
-        </table>
+        </table><br>
         <button type="submit">Search Rooms</button>
     </form>
-    <div th:if="${search}">
+    <div th:if="${!errorMessage.isBlank()}">
+        <p th:text="${errorMessage}"></p>
+    </div>
+    <div th:if="${search} and ${errorMessage.isBlank()}">
         <p th:if="${rooms.isEmpty()}">No vacancies found</p>
         <h3>Available Rooms</h3>
         <form th:action="@{/book-room/selected}" th:method="post" th:object="${roomSelectionDto}">
             <table>
                 <thead>
                 <tr>
+                    <th>Select</th>
                     <th>Name</th>
                     <th>Size</th>
                     <th>Beds</th>
                     <th>Extra Beds</th>
-<!--                    <th>Start Date</th>-->
-<!--                    <th>End Date</th>-->
-<!--                    <th>Guests</th>-->
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="room : ${rooms}">
+                    <td><input type="radio" th:field="*{roomId}" th:value="${room.id}"></td>
                     <td th:text="${room.name}"></td>
                     <td th:text="${room.roomSize.size}"></td>
                     <td th:text="${room.roomSize.beds}"></td>
                     <td th:text="${room.roomSize.maxExtraBeds}"></td>
-<!--                    <td th:text="${roomSearchDto.startDate}"></td>-->
-<!--                    <td th:text="${roomSearchDto.endDate}"></td>-->
-<!--                    <td th:text="${roomSearchDto.totalGuests}"></td>-->
-                    <td><input type="radio" th:field="*{roomId}" th:value="${room.id}"></td>
                 </tr>
                 </tbody>
             </table>
+            <br>
             <input type="hidden" th:value="${roomSearchDto.startDate}" name="startDate" id="startDate">
             <input type="hidden" th:value="${roomSearchDto.endDate}" name="endDate" id="endDate">
             <input type="hidden" th:value="${roomSearchDto.totalGuests}" name="totalGuests" id="totalGuests">
-            <table>
-                <tr>
-                    <td>
-                        <label for="customer">Customer: </label>
-                        <select id="customer" name="customer" th:field="*{customerId}">
-                            <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="submit">Book Room</button>
-                    </td>
-                </tr>
-            </table>
+            <label for="customer">Customer:</label>
+            <select id="customer" name="customer" th:field="*{customerId}" th:value="${customers.get(0).id}">
+                <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
+            </select>
+            <button type="submit">Book Room</button>
         </form>
     </div>
 </body>
