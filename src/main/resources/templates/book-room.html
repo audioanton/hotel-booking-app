@@ -6,19 +6,19 @@
 </head>
 <body>
     <h1>Book Room</h1>
-    <form th:action="@{/book-room}" th:object="${roomSearch}" method="post">
+    <form th:action="@{/book-room}" th:object="${roomSearchDto}" method="post">
         <table>
             <tr>
                 <td><label for="start-date">Start Date:</label></td>
-                <td><input id="start-date" type="date" name="start-date"></td>
+                <td><input id="start-date" type="date" th:field="*{startDate}"></td>
             </tr>
             <tr>
                 <td><label for="end-date">End Date:</label></td>
-                <td><input id="end-date" type="date" name="end-date"></td>
+                <td><input id="end-date" type="date" th:field="*{endDate}"></td>
             </tr>
             <tr>
                 <td><label for="total-guests">Total Guests:</label></td>
-                <td><input id="total-guests" name="total-guests" type="number"></td>
+                <td><input id="total-guests" th:field="*{totalGuests}" type="number"></td>
             </tr>
         </table>
         <button type="submit">Search Rooms</button>
@@ -26,35 +26,50 @@
     <div th:if="${search}">
         <p th:if="${rooms.isEmpty()}">No vacancies found</p>
         <h3>Available Rooms</h3>
-        <form>
+        <form th:action="@{/book-room/selected}" th:method="post" th:object="${roomSelectionDto}">
             <table>
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Room Size</th>
+                    <th>Size</th>
                     <th>Beds</th>
-                    <th>Available Extra Beds</th>
+                    <th>Extra Beds</th>
+<!--                    <th>Start Date</th>-->
+<!--                    <th>End Date</th>-->
+<!--                    <th>Guests</th>-->
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="room : ${rooms}">
                     <td th:text="${room.name}"></td>
-<!--                    <td th:text="${room.size}"></td>-->
-                    <td th:text="${room.getRoomSize().getSize()}"></td>
-<!--                    <td th:text="${room.extraBeds}"></td>-->
-                    <td><label th:value="${room.id}">
-                        <input type="radio">
-                    </label></td>
+                    <td th:text="${room.roomSize.size}"></td>
+                    <td th:text="${room.roomSize.beds}"></td>
+                    <td th:text="${room.roomSize.maxExtraBeds}"></td>
+<!--                    <td th:text="${roomSearchDto.startDate}"></td>-->
+<!--                    <td th:text="${roomSearchDto.endDate}"></td>-->
+<!--                    <td th:text="${roomSearchDto.totalGuests}"></td>-->
+                    <td><input type="radio" th:field="*{roomId}" th:value="${room.id}"></td>
                 </tr>
                 </tbody>
             </table>
-            <label for="guest">Guest:</label>
-            <select id="guest" name="guest">
-                <!--  iterate over guests and put guest name in option elements -->
-                <option th:each="guest: ${guests}" th:text="${guest.name}" th:value="${guest.id}"></option>
-                <option value="none" disabled selected>None</option>
-            </select>
-            <button type="submit" th:onclick="@{/book-room/selected}" th:method="post" th:object="${roomSelection}">Book Room</button>
+            <input type="hidden" th:value="${roomSearchDto.startDate}" name="startDate" id="startDate">
+            <input type="hidden" th:value="${roomSearchDto.endDate}" name="endDate" id="endDate">
+            <input type="hidden" th:value="${roomSearchDto.totalGuests}" name="totalGuests" id="totalGuests">
+            <table>
+                <tr>
+                    <td>
+                        <label for="customer">Customer: </label>
+                        <select id="customer" name="customer" th:field="*{customerId}">
+                            <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit">Book Room</button>
+                    </td>
+                </tr>
+            </table>
         </form>
     </div>
 </body>

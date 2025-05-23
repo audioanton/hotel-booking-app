@@ -27,6 +27,6 @@ public class RoomServiceImp implements RoomService {
 
     @Override
     public RoomDto toRoomDto(Room room, RoomSizeDto roomSizeDto) {
-        return RoomDto.builder().name(room.getName()).roomSize(roomSizeDto).build();
+        return RoomDto.builder().id(room.getId()).name(room.getName()).roomSize(roomSizeDto).build();
     }
 }

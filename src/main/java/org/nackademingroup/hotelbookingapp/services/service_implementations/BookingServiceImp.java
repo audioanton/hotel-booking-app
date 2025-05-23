@@ -7,7 +7,6 @@ import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,8 +127,7 @@ public class BookingServiceImp implements BookingService {
     }
 
     @Override
-    public List<RoomDto> getAvailableRooms(RoomSearch roomSearch) {
-        System.out.println(roomService.getRooms());
+    public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto) {
         return roomService.getRooms();
     }
 

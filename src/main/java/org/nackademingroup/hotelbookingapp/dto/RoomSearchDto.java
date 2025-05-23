@@ -13,10 +13,11 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomSearch {
+public class RoomSearchDto {
     @Temporal(TemporalType.DATE)
     private LocalDate startDate;
     @Temporal(TemporalType.DATE)
     private LocalDate endDate;
     private int totalGuests;
+
 }

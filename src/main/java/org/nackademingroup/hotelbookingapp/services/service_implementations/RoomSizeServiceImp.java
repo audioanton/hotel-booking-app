@@ -21,6 +21,6 @@ public class RoomSizeServiceImp implements RoomSizeService {
 
     @Override
     public RoomSizeDto toRoomSizeDto(RoomSize roomSize) {
-        return RoomSizeDto.builder().size(roomSize.getSize()).build();
+        return RoomSizeDto.builder().size(roomSize.getSize()).beds(roomSize.getBeds()).maxExtraBeds(roomSize.getMaxExtraBeds()).build();
     }
 }

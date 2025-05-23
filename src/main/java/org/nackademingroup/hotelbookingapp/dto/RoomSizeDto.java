@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RoomSizeDto {
     private String size;
+    private int beds, maxExtraBeds;
 }

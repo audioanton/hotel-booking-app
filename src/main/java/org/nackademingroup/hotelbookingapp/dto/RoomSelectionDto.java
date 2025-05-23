@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoomSelection {
+public class RoomSelectionDto {
     private Long roomId;
     private int totalGuests;
     private Long customerId;

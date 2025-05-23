@@ -1,7 +1,7 @@
 package org.nackademingroup.hotelbookingapp.controllers;
 
-import org.nackademingroup.hotelbookingapp.dto.RoomSearch;
-import org.nackademingroup.hotelbookingapp.dto.RoomSelection;
+import org.nackademingroup.hotelbookingapp.dto.RoomSearchDto;
+import org.nackademingroup.hotelbookingapp.dto.RoomSelectionDto;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.BookingService;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +20,25 @@ public class BookRoomController {
 
     @GetMapping("/book-room")
     public String showBookRoom(Model model) {
-        model.addAttribute(RoomSearch.builder().build());
+        model.addAttribute(RoomSearchDto.builder().build());
         model.addAttribute("search", false);
         return "book-room";
     }
 
     @PostMapping("/book-room")
-    public String showAvailableRooms(Model model, RoomSearch roomSearch) {
-        model.addAttribute("rooms", bookingService.getAvailableRooms(roomSearch));
-        model.addAttribute(roomSearch);
-        model.addAttribute("guests", customerService.getCustomerDtos());
+    public String showAvailableRooms(Model model, RoomSearchDto roomSearchDto) {
+        model.addAttribute("rooms", bookingService.getAvailableRooms(roomSearchDto));
+        model.addAttribute(roomSearchDto);
+        model.addAttribute("customers", customerService.getCustomerDtos());
         model.addAttribute("search", true);
-        model.addAttribute("roomSelection", RoomSelection.builder().build());
+        model.addAttribute("roomSearchDto", roomSearchDto);
+        model.addAttribute("roomSelectionDto", new RoomSelectionDto());
         return "book-room";
     }
 
     @PostMapping("/book-room/selected")
-    public String selectRoom(Model model, RoomSelection roomSelection) {
-        return "index";
+    public String selectRoom(Model model, RoomSelectionDto roomSelectionDto) {
+//        bookingService.saveRoomSelection(roomSelection);
+        return "redirect:/book-room";
     }
 }
