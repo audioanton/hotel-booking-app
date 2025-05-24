@@ -11,14 +11,10 @@ import java.util.List;
 
 @Controller
 public class IndexController {
-    @Autowired
-    RoomRepository roomRepository;
 
     @GetMapping("/")
     public String index(Model model) {
-        List<Room> rooms = roomRepository.findAll();
-        model.addAttribute("rooms", rooms);
-        model.addAttribute("message", "Hello World!");
+        model.addAttribute("message", "Welcome to the Hotel Booking App!");
         return "index";
     }
 }
