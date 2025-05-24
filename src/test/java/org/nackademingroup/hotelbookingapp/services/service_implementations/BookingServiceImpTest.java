@@ -2,6 +2,7 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nackademingroup.hotelbookingapp.dto.RoomSelectionDto;
 import org.nackademingroup.hotelbookingapp.models.Booking;
 import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ class BookingServiceImpTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private BookingServiceImp bookingServiceImp;
+    private BookingServiceImp bookingService;
     @Autowired
     private BookingRepository bookingRepository;
 
@@ -33,17 +34,14 @@ class BookingServiceImpTest {
         bookingRepository.saveAll(
                 List.of(
                         Booking.builder()
-                                .id(1L)
                                 .startDate(LocalDate.of(2020,1,1))
                                 .endDate(LocalDate.of(2020,1,2))
                                 .build(),
                         Booking.builder()
-                                .id(2L)
                                 .startDate(LocalDate.of(2024,1,1))
                                 .endDate(LocalDate.of(2024,1,5))
                                 .build(),
                         Booking.builder()
-                                .id(3L)
                                 .startDate(LocalDate.of(2025,1,1))
                                 .endDate(LocalDate.of(2025,1,3))
                                 .build()
@@ -74,5 +72,16 @@ class BookingServiceImpTest {
     @Test
     void getBookings() {
         fail();
+    }
+
+    @Test
+    void getExtraDatesForBooking() {
+        RoomSelectionDto noExtraBeds = RoomSelectionDto.builder().totalGuests(2).build();
+        RoomSelectionDto oneExtraBed = RoomSelectionDto.builder().totalGuests(3).build();
+        RoomSelectionDto twoExtraBeds = RoomSelectionDto.builder().totalGuests(4).build();
+
+        assertEquals(0, bookingService.getExtraBedsForBooking(2, noExtraBeds));
+        assertEquals(1, bookingService.getExtraBedsForBooking(2, oneExtraBed));
+        assertEquals(2, bookingService.getExtraBedsForBooking(2, twoExtraBeds));
     }
 }

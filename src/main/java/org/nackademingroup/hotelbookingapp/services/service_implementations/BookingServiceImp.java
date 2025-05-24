@@ -3,6 +3,7 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 import org.nackademingroup.hotelbookingapp.dto.*;
 import org.nackademingroup.hotelbookingapp.models.Booking;
 import org.nackademingroup.hotelbookingapp.models.BookingDetails;
+import org.nackademingroup.hotelbookingapp.models.Room;
 import org.nackademingroup.hotelbookingapp.repositories.BookingRepository;
 import org.nackademingroup.hotelbookingapp.repositories.RoomRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.*;
@@ -13,10 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class BookingServiceImp implements BookingService {
+public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.services.service_interfaces.BookingService {
 
     @Autowired
     private BookingRepository bookingRepository;
@@ -185,14 +185,17 @@ public class BookingServiceImp implements BookingService {
         customerOpt.ifPresent(customerDto -> booking.setCustomer(customerService.toCustomer(customerDto)));
 
         BookingDetails bookingDetails = new BookingDetails();
-        bookingDetails.setRoom(roomRepository.findById(roomSelectionDto.getRoomId()).orElse(null));
-        bookingDetails.setExtraBeds(getExtraBedsForBooking(bookingDetails, roomSelectionDto));
-        booking.setBookingDetails(bookingDetails);
-        Booking savedBooking = bookingRepository.save(booking);
+        Room room = roomRepository.findById(roomSelectionDto.getRoomId()).orElse(null);
+        if (room != null) {
+            bookingDetails.setRoom(room);
+            bookingDetails.setExtraBeds(getExtraBedsForBooking(room.getRoomsize().getBeds(), roomSelectionDto));
+            booking.setBookingDetails(bookingDetails);
+            bookingRepository.save(booking);
+        }
     }
 
-    private int getExtraBedsForBooking(BookingDetails bookingDetails, RoomSelectionDto roomSelectionDto) {
-        return roomSelectionDto.getTotalGuests() - bookingDetails.getRoom().getRoomsize().getBeds();
+    public int getExtraBedsForBooking(int beds, RoomSelectionDto roomSelectionDto) {
+        return Math.max(roomSelectionDto.getTotalGuests() - beds, 0);
     }
 
 }
