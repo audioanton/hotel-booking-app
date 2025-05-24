@@ -7,6 +7,9 @@
 <body>
     <div th:replace="fragments/header :: header"></div>
     <h1>Book Room</h1>
+
+    <div th:if="${error}" th:text="${error}"></div>
+
     <form th:action="@{/book-room}" th:object="${roomSearchDto}" method="post">
         <table>
             <tr>
@@ -24,10 +27,10 @@
         </table><br>
         <button type="submit">Search Rooms</button>
     </form>
-    <div th:if="${!errorMessage.isBlank()}">
+    <div th:if="${errorMessage != null and errorMessage != ''}">
         <p th:text="${errorMessage}"></p>
     </div>
-    <div th:if="${search} and ${errorMessage.isBlank()}">
+    <div th:if="${search == true and (errorMessage == null or errorMessage == '')}">
         <p th:if="${rooms.isEmpty()}">No vacancies found</p>
         <h3>Available Rooms</h3>
         <form th:action="@{/book-room/selected}" th:method="post" th:object="${roomSelectionDto}">
@@ -60,7 +63,9 @@
                 <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
             </select>
             <button type="submit">Book Room</button>
+            <div th:if="${errorRoomSelection}" th:text="${errorRoomSelection}"></div>
         </form>
     </div>
 </body>
 </html>
+

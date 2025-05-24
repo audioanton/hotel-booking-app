@@ -1,12 +1,15 @@
 package org.nackademingroup.hotelbookingapp.controllers;
 
+import jakarta.validation.Valid;
 import org.nackademingroup.hotelbookingapp.dto.BookingDto;
 import org.nackademingroup.hotelbookingapp.models.Booking;
 import org.nackademingroup.hotelbookingapp.services.service_implementations.BookingServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,35 +48,38 @@ public class BookingController {
     }
 
     @PostMapping("/bookings/{id}/edit/extra-beds")
-    public String editExtraBeds(@PathVariable("id") Long id, Booking booking, Model model) {
+    public String editExtraBeds(@PathVariable("id") Long id, @Valid Booking booking, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+            return "redirect:/bookings/" + id;
+        }
+
         try {
             bookingService.updateBookingExtraBeds(id, booking);
-            BookingDto updatedBooking = bookingService.getBookingById(id);
-            model.addAttribute("booking", updatedBooking);
-            model.addAttribute("successMessageExtraBeds", "Extra beds updated successfully");
-            return "booking";
+            redirectAttributes.addFlashAttribute("successMessageExtraBeds", "Extra beds updated successfully");
+            return "redirect:/bookings/" + id;
         } catch (IllegalArgumentException e) {
-            BookingDto currentBooking = bookingService.getBookingById(id);
-            model.addAttribute("booking", currentBooking);
-            model.addAttribute("errorMessageExtraBeds", e.getMessage());
-            return "booking";
+            redirectAttributes.addFlashAttribute("errorMessageExtraBeds", e.getMessage());
+            return "redirect:/bookings/" + id;
         }
     }
 
     @PostMapping("/bookings/{id}/edit/dates")
-    public String editDates(@PathVariable("id") Long id, BookingDto bookingDto, Model model) {
+    public String editDates(@PathVariable("id") Long id, @Valid BookingDto bookingDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+            return "redirect:/bookings/" + id;
+        }
+
         try {
             bookingService.updateBookingDates(id, bookingDto);
-            BookingDto updatedBooking = bookingService.getBookingById(id);
-            model.addAttribute("booking", updatedBooking);
-            model.addAttribute("successMessageDates", "Dates updated successfully");
-            return "booking";
+            redirectAttributes.addFlashAttribute("successMessageDates", "Dates updated successfully");
+            return "redirect:/bookings/" + id;
         } catch (IllegalArgumentException e) {
-            BookingDto currentBooking = bookingService.getBookingById(id);
-            model.addAttribute("booking", currentBooking);
-            model.addAttribute("errorMessageDates", e.getMessage());
-            return "booking";
+            redirectAttributes.addFlashAttribute("errorMessageDates", e.getMessage());
+            return "redirect:/bookings/" + id;
         }
     }
 
 }
+
