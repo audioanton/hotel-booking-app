@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
+
 @Controller
 public class BookRoomController {
 
@@ -24,7 +26,9 @@ public class BookRoomController {
 
     @GetMapping("/book-room")
     public String showBookRoom(Model model) {
-        model.addAttribute(RoomSearchDto.builder().build());
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        model.addAttribute(RoomSearchDto.builder().startDate(today).endDate(tomorrow).build());
         model.addAttribute("errorMessage", "");
         model.addAttribute("search", false);
         return "book-room";
@@ -56,7 +60,9 @@ public class BookRoomController {
     public String selectRoom(Model model, @Valid RoomSelectionDto roomSelectionDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errorRoomSelection", bindingResult.getFieldError().getDefaultMessage());
-            return "book-room";
+            model.addAttribute("errorMessage", bindingResult.getFieldError().getDefaultMessage());
+            model.addAttribute("errorRoomSelection", bindingResult.getFieldError().getDefaultMessage());
+            return "redirect:/book-room";
         }
 
         try {

@@ -8,7 +8,7 @@
     <div th:replace="fragments/header :: header"></div>
     <h1>Book Room</h1>
 
-    <div th:if="${error}" th:text="${error}"></div>
+    <div th:if="${error}" th:text="${error}" style="color: red;"></div>
 
     <form th:action="@{/book-room}" th:object="${roomSearchDto}" method="post">
         <table>
@@ -63,7 +63,7 @@
                 <option th:each="customer: ${customers}" th:text="${customer.name}" th:value="${customer.id}"></option>
             </select>
             <button type="submit">Book Room</button>
-            <div th:if="${errorRoomSelection}" th:text="${errorRoomSelection}"></div>
+            <div th:if="${errorRoomSelection}" th:text="${errorRoomSelection}" style="color: red;"></div>
         </form>
     </div>
 </body>
