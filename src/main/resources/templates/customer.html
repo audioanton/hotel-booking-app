@@ -10,8 +10,7 @@
     <div class="container">
         <h1 th:text="${customer.id == null} ? 'Add New Customer' : 'Edit Customer'">Customer</h1>
 
-        <div th:if="${successMessage}" th:text="${successMessage}" class="success-message"></div>
-        <div th:if="${error}" th:text="${error}" class="general-error"></div>
+        <div th:if="${error}" th:text="${error}" style="color: red;"></div>
 
         <form th:action="${customer.id == null} ? @{/customers/create} : @{/customers/{id}(id=${customer.id})}"
               th:object="${customer}" method="post">
@@ -19,20 +18,12 @@
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" id="name" th:field="*{name}" 
-                       th:class="${#fields.hasErrors('name')} ? 'error' : ''" 
                        required />
-                <div th:if="${#fields.hasErrors('name')}" class="error-message">
-                    <span th:each="error : ${#fields.errors('name')}" th:text="${error}"></span>
-                </div>
             </div>
 
             <div class="form-group">
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" 
-                       th:class="${#fields.hasErrors('phoneNumber')} ? 'error' : ''" />
-                <div th:if="${#fields.hasErrors('phoneNumber')}" class="error-message">
-                    <span th:each="error : ${#fields.errors('phoneNumber')}" th:text="${error}"></span>
-                </div>
+                <input type="text" id="phoneNumber" th:field="*{phoneNumber}"/>
             </div>
 
             <button type="submit" th:text="${customer.id == null} ? 'Create' : 'Update'"></button>
