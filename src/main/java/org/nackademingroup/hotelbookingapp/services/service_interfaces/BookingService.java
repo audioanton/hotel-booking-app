@@ -12,7 +12,7 @@ public interface BookingService {
 
     public Booking updateBooking(Booking booking);
 
-    public void updateBookingExtraBeds(Long id, Booking booking);
+    public void updateBookingExtraBeds(Long id, BookingDto bookingDto);
 
     public void updateBookingDates(Long id, BookingDto booking);
 
