@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Transactional
 @SpringBootTest(classes = HotelBookingAppApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -46,10 +45,6 @@ class CustomerServiceImpTest {
         fail();
     }
 
-    @Test
-    void updateCustomer() {
-        fail();
-    }
 
     @Test
     void toCustomerDto() {
@@ -76,7 +71,6 @@ class CustomerServiceImpTest {
     }
 
     @Test
-    @Transactional
     void toCustomer() {
         CustomerDto testDto = CustomerDto.builder()
                 .id(testCustomers.get(0).getId())
@@ -91,7 +85,6 @@ class CustomerServiceImpTest {
         assertEquals(testCustomers.get(0).getPhoneNumber(), actual.getPhoneNumber());
     }
 
-    @Transactional
     @Test
     void deleteCustomer() throws Exception {
         assert(customerService.getCustomerDtos().stream()
@@ -140,9 +133,29 @@ class CustomerServiceImpTest {
         assertEquals(expected.get(0).getPhoneNumber(), actual.get(0).getPhoneNumber());
         assertEquals(expected.get(0).getPhoneNumber(), actual.get(0).getPhoneNumber());
         assertEquals(expected.get(0).getPhoneNumber(), actual.get(0).getPhoneNumber());
+    }
 
+    @Test
+    void updateCustomer() {
+        String update = "Update";
+        String name = customerRepository.findById(testCustomers.get(0).getId()).get().getName();
+        String number = customerRepository.findById(testCustomers.get(0).getId()).get().getPhoneNumber();
 
+        CustomerDto newDto = CustomerDto.builder()
+                .id(testCustomers.get(0).getId())
+                .name(update)
+                .phoneNumber(update)
+                .build();
 
+        customerService.updateCustomer(newDto);
+
+        String newName = customerRepository.findById(testCustomers.get(0).getId()).get().getName();
+        String newNumber = customerRepository.findById(testCustomers.get(0).getId()).get().getPhoneNumber();
+
+        assertNotEquals(name, newName);
+        assertNotEquals(number, newNumber);
+        assertEquals(update, newName);
+        assertEquals(update, newNumber);
     }
 }
 
