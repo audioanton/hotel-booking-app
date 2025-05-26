@@ -21,7 +21,7 @@
 
             <div class="form-group">
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" required />
+                <input type="text" id="phoneNumber" th:field="*{phoneNumber}" />
             </div>
 
             <button type="submit" th:text="${customer.id == null} ? 'Create' : 'Update'"></button>
