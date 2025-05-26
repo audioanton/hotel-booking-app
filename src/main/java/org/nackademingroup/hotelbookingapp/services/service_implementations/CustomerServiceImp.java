@@ -28,20 +28,20 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public Customer createCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public void createCustomer(CustomerDto customerDto) {
+        customerRepository.save(this.toCustomer(customerDto));
     }
 
     @Override
-    public Customer updateCustomer(Customer customer) {
+    public void updateCustomer(CustomerDto customerDto) {
+        Customer customer = this.toCustomer(customerDto);
         Optional<Customer> customerOpt = customerRepository.findById(customer.getId());
         if (customerOpt.isPresent()) {
             Customer existingCustomer = customerOpt.get();
             existingCustomer.setName(customer.getName());
             existingCustomer.setPhoneNumber(customer.getPhoneNumber());
-            return customerRepository.save(existingCustomer);
+            customerRepository.save(existingCustomer);
         } else {
-            return customer;
         }
     }
 

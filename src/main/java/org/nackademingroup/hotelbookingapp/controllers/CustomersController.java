@@ -48,16 +48,16 @@ public class CustomersController {
     }
 
     @PostMapping("/customers/create")
-    public String createCustomer(Customer customer) {
-        customerService.createCustomer(customer);
+    public String createCustomer(CustomerDto customerDto) {
+        customerService.createCustomer(customerDto);
         return "redirect:/customers";
     }
 
     @PostMapping("/customers/{id}")
-    public String updateCustomer(@PathVariable("id") Long id, Customer customer) {
+    public String updateCustomer(@PathVariable("id") Long id, CustomerDto customerDto) {
         // TODO: Validation?
-        customer.setId(id);
-        customerService.updateCustomer(customer);
+        customerDto.setId(id);
+        customerService.updateCustomer(customerDto);
         return "redirect:/customers";
     }
 
