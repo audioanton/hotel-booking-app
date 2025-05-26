@@ -78,12 +78,14 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
             BookingDetails currentBooking = b.getBookingDetails();
             int maxExtraBeds = currentBooking.getRoom().getRoomsize().getMaxExtraBeds();
 
-            if (updatedBooking.getBookingDetails().getExtraBeds() <= maxExtraBeds) {
-                currentBooking.setExtraBeds(updatedBooking.getBookingDetails().getExtraBeds());
-                bookingRepository.save(b);
-            } else {
+            if (updatedBooking.getBookingDetails().getExtraBeds() < 0) {
+                throw new IllegalArgumentException("Extra beds cannot be negative");
+            }
+            if (updatedBooking.getBookingDetails().getExtraBeds() >= maxExtraBeds) {
                 throw new IllegalArgumentException("Extra beds cannot exceed the maximum allowed (" + maxExtraBeds + ")");
             }
+            currentBooking.setExtraBeds(updatedBooking.getBookingDetails().getExtraBeds());
+            bookingRepository.save(b);
         });
     }
 
