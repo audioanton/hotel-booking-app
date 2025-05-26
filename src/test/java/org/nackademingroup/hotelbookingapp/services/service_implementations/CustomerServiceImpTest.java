@@ -106,5 +106,43 @@ class CustomerServiceImpTest {
                 .toList()
                 .contains(testCustomers.get(0).getId()));
     }
+
+    @Test
+    void getCustomerDtos() {
+        List<CustomerDto> expected = List.of(
+                CustomerDto.builder()
+                  .name(testCustomers.get(0).getName())
+                  .id(testCustomers.get(0).getId())
+                  .phoneNumber(testCustomers.get(0).getPhoneNumber())
+                  .build(),
+                CustomerDto.builder()
+                        .name(testCustomers.get(1).getName())
+                        .id(testCustomers.get(1).getId())
+                        .phoneNumber(testCustomers.get(1).getPhoneNumber())
+                        .build(),
+                CustomerDto.builder()
+                        .name(testCustomers.get(2).getName())
+                        .id(testCustomers.get(2).getId())
+                        .phoneNumber(testCustomers.get(2).getPhoneNumber())
+                        .build()
+        );
+
+        List<CustomerDto> actual = customerService.getCustomerDtos();
+
+        assertEquals(expected.get(0).getId(), actual.get(0).getId());
+        assertEquals(expected.get(1).getId(), actual.get(1).getId());
+        assertEquals(expected.get(2).getId(), actual.get(2).getId());
+
+        assertEquals(expected.get(0).getName(), actual.get(0).getName());
+        assertEquals(expected.get(1).getName(), actual.get(1).getName());
+        assertEquals(expected.get(2).getName(), actual.get(2).getName());
+
+        assertEquals(expected.get(0).getPhoneNumber(), actual.get(0).getPhoneNumber());
+        assertEquals(expected.get(0).getPhoneNumber(), actual.get(0).getPhoneNumber());
+        assertEquals(expected.get(0).getPhoneNumber(), actual.get(0).getPhoneNumber());
+
+
+
+    }
 }
 
