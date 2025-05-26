@@ -18,7 +18,5 @@ public interface CustomerService {
 
     public Customer createCustomer(Customer customer);
 
-    public boolean canDeleteCustomer(Long id);
-
     public void deleteCustomer(Long id);
 }

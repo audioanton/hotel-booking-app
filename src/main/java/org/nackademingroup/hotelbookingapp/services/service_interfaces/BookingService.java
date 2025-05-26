@@ -25,4 +25,6 @@ public interface BookingService {
     public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto);
 
     public void createBooking(RoomSelectionDto roomSelectionDto);
+
+    boolean hasActiveBookings(Long customerId);
 }

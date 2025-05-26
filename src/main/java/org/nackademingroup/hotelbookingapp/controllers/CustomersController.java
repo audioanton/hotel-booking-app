@@ -3,6 +3,7 @@ package org.nackademingroup.hotelbookingapp.controllers;
 import org.nackademingroup.hotelbookingapp.dto.CustomerDto;
 import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.nackademingroup.hotelbookingapp.services.service_implementations.CustomerServiceImp;
+import org.nackademingroup.hotelbookingapp.services.service_interfaces.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +20,8 @@ public class CustomersController {
 
     @Autowired
     private CustomerServiceImp customerService;
+    @Autowired
+    private BookingService bookingService;
 
     @GetMapping("/customers")
     public String customer(Model model) {
@@ -63,7 +66,7 @@ public class CustomersController {
 
     @PostMapping("/customers/{id}/delete")
     public String deleteCustomer(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-        if (!customerService.canDeleteCustomer(id)) {
+        if (bookingService.hasActiveBookings(id)) {
             redirectAttributes.addFlashAttribute("error", "Cannot delete customer with existing bookings");
             return "redirect:/customers/" + id;
         }

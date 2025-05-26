@@ -46,11 +46,6 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public boolean canDeleteCustomer(Long id) {
-        return bookingRepository.countByCustomerId(id) == 0;
-    }
-
-    @Override
     public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);
     }
