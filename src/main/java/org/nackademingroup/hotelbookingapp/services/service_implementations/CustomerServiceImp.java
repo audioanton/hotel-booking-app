@@ -20,24 +20,6 @@ public class CustomerServiceImp implements CustomerService {
     @Autowired
     private BookingRepository bookingRepository;
 
-    public List<Customer> getMockCustomers() {
-        /*
-        List<Customer> mockCustomers = new ArrayList<>();
-        mockCustomers.add(Customer.builder()
-                .id(1L)
-                .name("Antonio Larzon")
-                .phone_number("123-456-7890")
-                .build());
-
-        mockCustomers.add(Customer.builder()
-                .id(2L)
-                .name("Viktor Jonzon")
-                .phone_number("098-765-4321")
-                .build());
-
-         */
-        return null;
-    }
 
     @Override
     public Optional<CustomerDto> getCustomerDtoById(Long id) {

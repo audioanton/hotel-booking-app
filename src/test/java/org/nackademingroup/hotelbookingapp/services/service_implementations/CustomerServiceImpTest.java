@@ -3,6 +3,7 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nackademingroup.hotelbookingapp.HotelBookingAppApplication;
 import org.nackademingroup.hotelbookingapp.dto.CustomerDto;
 import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.nackademingroup.hotelbookingapp.repositories.CustomerRepository;
@@ -12,14 +13,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(classes = HotelBookingAppApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class CustomerServiceImpTest {
@@ -59,7 +57,7 @@ class CustomerServiceImpTest {
     }
 
     @Test
-    void getCustomerDtoById() {
+    void getCustomerDtoById() throws Exception {
         List<Long> ids = testCustomers.stream().map(Customer::getId).toList();
         List<String> names = testCustomers.stream().map(Customer::getName).toList();
         List<String> numbers = testCustomers.stream().map(Customer::getPhoneNumber).toList();
@@ -75,6 +73,38 @@ class CustomerServiceImpTest {
         assertEquals(numbers.get(0), customerService.getCustomerDtoById(ids.get(0)).get().getPhoneNumber());
         assertEquals(numbers.get(1), customerService.getCustomerDtoById(ids.get(1)).get().getPhoneNumber());
         assertEquals(numbers.get(2), customerService.getCustomerDtoById(ids.get(2)).get().getPhoneNumber());
+    }
+
+    @Test
+    @Transactional
+    void toCustomer() {
+        CustomerDto testDto = CustomerDto.builder()
+                .id(testCustomers.get(0).getId())
+                .name(testCustomers.get(0).getName())
+                .phoneNumber(testCustomers.get(0).getPhoneNumber())
+                .build();
+
+        Customer actual = customerService.toCustomer(testDto);
+
+        assertEquals(testCustomers.get(0).getId(), actual.getId());
+        assertEquals(testCustomers.get(0).getName(), actual.getName());
+        assertEquals(testCustomers.get(0).getPhoneNumber(), actual.getPhoneNumber());
+    }
+
+    @Transactional
+    @Test
+    void deleteCustomer() throws Exception {
+        assert(customerService.getCustomerDtos().stream()
+                .map(CustomerDto::getId)
+                .toList()
+                .contains(testCustomers.get(0).getId()));
+
+        customerService.deleteCustomer(testCustomers.get(0).getId());
+
+        assert(!customerService.getCustomerDtos().stream()
+                .map(CustomerDto::getId)
+                .toList()
+                .contains(testCustomers.get(0).getId()));
     }
 }
 
