@@ -28,24 +28,23 @@ class CustomerServiceImpTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private CustomerServiceImp customerServiceImp;
+    private CustomerService customerService;
     @Autowired
     private CustomerRepository customerRepository;
 
     Customer customer = Customer.builder().name("Bingo").phoneNumber("1").build();
     CustomerDto customerDto = CustomerDto.builder().name("Bingo").phoneNumber("1").build();
 
-    /*@BeforeEach
-    private final List<Customer> testCustomers = List.of(
-            Customer.builder().name("Bingo").phoneNumber("1").build(),
-            Customer.builder().name("Ringo").phoneNumber("2").build(),
-            Customer.builder().name("Dingo").phoneNumber("3").build()
-    );
-
     @BeforeEach
     public void setup() {
         customerRepository.deleteAll();
-        customerRepository.saveAll(testCustomers);
+        customerRepository.saveAll(
+                List.of(
+                        Customer.builder().name("Bingo").phoneNumber("1").build(),
+                        Customer.builder().name("Ringo").phoneNumber("2").build(),
+                        Customer.builder().name("Dingo").phoneNumber("3").build()
+                )
+        );
     }
 
     @Test
@@ -54,6 +53,15 @@ class CustomerServiceImpTest {
         assertEquals(customer.getName(), actualDto.getName());
         assertEquals(customer.getPhoneNumber(), actualDto.getPhoneNumber());
     }
+
+    @Test
+    void createCustomer() {
+
+        customerService.createCustomer(customer);
+
+        assertEquals(4, customerRepository.count());
+    }
+
 
     /*@Test
     void getCustomerById() {
