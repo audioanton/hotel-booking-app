@@ -1,11 +1,13 @@
 package org.nackademingroup.hotelbookingapp.controllers;
 
+import jakarta.validation.Valid;
 import org.nackademingroup.hotelbookingapp.dto.CustomerDto;
 import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.nackademingroup.hotelbookingapp.services.service_implementations.CustomerServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,14 +50,26 @@ public class CustomersController {
     }
 
     @PostMapping("/customers/create")
-    public String createCustomer(CustomerDto customerDto) {
+    public String createCustomer(@Valid CustomerDto customerDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("Validation errors: " + bindingResult.getAllErrors());
+            model.addAttribute("customer", customerDto);
+            model.addAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+            return "customer";
+        }
+
         customerService.createCustomer(customerDto);
         return "redirect:/customers";
     }
 
     @PostMapping("/customers/{id}")
-    public String updateCustomer(@PathVariable("id") Long id, CustomerDto customerDto) {
-        // TODO: Validation?
+    public String updateCustomer(@PathVariable("id") Long id, @Valid CustomerDto customerDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("customer", customerDto);
+            model.addAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+            return "customer";
+        }
+
         customerDto.setId(id);
         customerService.updateCustomer(customerDto);
         return "redirect:/customers";
