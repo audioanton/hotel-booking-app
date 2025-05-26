@@ -11,6 +11,7 @@ import org.nackademingroup.hotelbookingapp.services.service_interfaces.CustomerS
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -31,6 +32,7 @@ class CustomerServiceImpTest {
     private CustomerRepository customerRepository;
 
     Customer customer = Customer.builder().name("Zingo").phoneNumber("4").build();
+    CustomerDto customerDto = CustomerDto.builder().name("Bingo").phoneNumber("1").build();
 
     private final List<Customer> testCustomers = List.of(
             Customer.builder().name("Bingo").phoneNumber("1").build(),
@@ -76,18 +78,6 @@ class CustomerServiceImpTest {
                 .map(Customer::getPhoneNumber)
                 .anyMatch(number -> number.equals("999")));
     }
-
-
-    /*@Test
-    void getCustomerById() {
-        fail();
-    }
-
-
-    @Test
-    void toCustomerDto() {
-        fail();
-    }*/
 
     @Test
     void getCustomerDtoById() throws Exception {
