@@ -45,9 +45,9 @@ public class BookingController {
     }
 
     @PostMapping("/bookings/{id}/edit/extra-beds")
-    public String editExtraBeds(@PathVariable("id") Long id, Booking booking, Model model) {
+    public String editExtraBeds(@PathVariable("id") Long id, BookingDto bookingDto, Model model) {
         try {
-            bookingService.updateBookingExtraBeds(id, booking);
+            bookingService.updateBookingExtraBeds(id, bookingDto);
             BookingDto updatedBooking = bookingService.getBookingById(id);
             model.addAttribute("booking", updatedBooking);
             model.addAttribute("successMessageExtraBeds", "Extra beds updated successfully");

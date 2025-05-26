@@ -73,7 +73,7 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
     }
 
     @Override
-    public void updateBookingExtraBeds(Long id, Booking updatedBooking) {
+    public void updateBookingExtraBeds(Long id, BookingDto updatedBooking) {
         bookingRepository.findById(id).ifPresent(b -> {
             BookingDetails currentBooking = b.getBookingDetails();
             int maxExtraBeds = currentBooking.getRoom().getRoomsize().getMaxExtraBeds();
