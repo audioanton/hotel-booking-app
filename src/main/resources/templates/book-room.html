@@ -6,6 +6,7 @@
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
+<main>
     <h1>Book Room</h1>
     <form th:action="@{/book-room}" th:object="${roomSearchDto}" method="post">
         <table>
@@ -19,9 +20,12 @@
             </tr>
             <tr>
                 <td><label for="total-guests">Total Guests:</label></td>
-                <td><input id="total-guests" name="totalGuests" th:value="${roomSearchDto.totalGuests > 0  ? roomSearchDto.totalGuests : 2}" type="number"></td>
+                <td><input id="total-guests" name="totalGuests"
+                           th:value="${roomSearchDto.totalGuests > 0  ? roomSearchDto.totalGuests : 2}" type="number">
+                </td>
             </tr>
-        </table><br>
+        </table>
+        <br>
         <button type="submit">Search Rooms</button>
     </form>
     <div th:if="${!errorMessage.isBlank()}">
@@ -62,5 +66,6 @@
             <button type="submit">Book Room</button>
         </form>
     </div>
+</main>
 </body>
 </html>

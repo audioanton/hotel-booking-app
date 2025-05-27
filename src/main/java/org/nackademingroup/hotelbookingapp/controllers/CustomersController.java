@@ -28,7 +28,6 @@ public class CustomersController {
     @GetMapping("/customers")
     public String customer(Model model) {
         List<CustomerDto> customers = customerService.getCustomerDtos();
-        System.out.println(customers);
         model.addAttribute("customers", customers);
         return "customers";
     }

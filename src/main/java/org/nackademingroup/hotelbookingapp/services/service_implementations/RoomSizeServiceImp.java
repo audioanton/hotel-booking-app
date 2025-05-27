@@ -13,7 +13,6 @@ public class RoomSizeServiceImp implements RoomSizeService {
     @Autowired
     RoomSizeRepository roomSizeRepository;
 
-
     @Override
     public RoomSize getRoomSizeById(Long id) {
         return roomSizeRepository.findById(id).orElse(null);

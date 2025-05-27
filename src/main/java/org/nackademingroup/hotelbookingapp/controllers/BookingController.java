@@ -1,8 +1,6 @@
 package org.nackademingroup.hotelbookingapp.controllers;
 
 import org.nackademingroup.hotelbookingapp.dto.BookingDto;
-import org.nackademingroup.hotelbookingapp.models.Booking;
-import org.nackademingroup.hotelbookingapp.services.service_implementations.BookingServiceImp;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,6 @@ public class BookingController {
     @GetMapping("/bookings")
     public String booking(Model model) {
         List<BookingDto> bookings = bookingService.getBookings();
-//        List<BookingDto> bookings = bookingService.getMockBookings();
         model.addAttribute("bookings", bookings);
         return "bookings";
     }
@@ -75,5 +72,4 @@ public class BookingController {
             return "booking";
         }
     }
-
 }

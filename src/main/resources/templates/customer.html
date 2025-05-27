@@ -6,6 +6,7 @@
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
+    <main>
     <div>
         <h1 th:text="${customer.id == null} ? 'Add New Customer' : 'Edit Customer'">Customer</h1>
 
@@ -25,7 +26,6 @@
             </div>
 
             <button type="submit" th:text="${customer.id == null} ? 'Create' : 'Update'"></button>
-            <a href="/customers">Back to Customers</a>
         </form>
 
         <div th:if="${customer.id != null}">
@@ -33,6 +33,9 @@
                 <button type="submit" style="background-color: #ff4444; color: white;">Delete</button>
             </form>
         </div>
+        <br>
+        <a href="/customers">← Back to Customers</a>
     </div>
+    </main>
 </body>
 </html>
