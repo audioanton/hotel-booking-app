@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Transactional
 @SpringBootTest(classes = HotelBookingAppApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -60,12 +59,12 @@ class CustomerServiceImpTest {
                 .findAll()
                 .stream()
                 .map(Customer::getName)
-                .anyMatch(name -> name.equals(customer.getName())));
+                .anyMatch(name -> name.equals(customerDto.getName())));
         assertTrue(customerRepository
                 .findAll()
                 .stream()
                 .map(Customer::getPhoneNumber)
-                .anyMatch(number -> number.equals(customer.getPhoneNumber())));
+                .anyMatch(number -> number.equals(customerDto.getPhoneNumber())));
         assertFalse(customerRepository
                 .findAll()
                 .stream()
@@ -98,7 +97,6 @@ class CustomerServiceImpTest {
     }
 
     @Test
-    @Transactional
     void toCustomer() {
         CustomerDto testDto = CustomerDto.builder()
                 .id(testCustomers.get(0).getId())
@@ -113,7 +111,6 @@ class CustomerServiceImpTest {
         assertEquals(testCustomers.get(0).getPhoneNumber(), actual.getPhoneNumber());
     }
 
-    @Transactional
     @Test
     void deleteCustomer() throws Exception {
         assert(customerService.getCustomerDtos().stream()
