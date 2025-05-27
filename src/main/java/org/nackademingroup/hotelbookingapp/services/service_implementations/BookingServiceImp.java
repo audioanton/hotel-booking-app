@@ -97,7 +97,8 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + id));
     }
 
-    private void validateDates(LocalDate startDate, LocalDate endDate) {
+    @Override
+    public void validateDates(LocalDate startDate, LocalDate endDate) {
         if (startDate == null || endDate == null)
             throw new IllegalArgumentException("Please enter both start and end date");
         if (startDate.isAfter(endDate)) {
@@ -108,7 +109,8 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
         }
     }
 
-    private void validateAvailability(Long id, LocalDate startDate, LocalDate endDate, Long roomId) {
+    @Override
+    public void validateAvailability(Long id, LocalDate startDate, LocalDate endDate, Long roomId) {
         List<Booking> activeBookings = bookingRepository
                 .findAllByStartDateLessThanEqualAndEndDateGreaterThanEqual(
                         endDate.minusDays(1),
@@ -167,6 +169,7 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
         }
     }
 
+    @Override
     public int getExtraBedsForBooking(int beds, RoomSelectionDto roomSelectionDto) {
         return Math.max(roomSelectionDto.getTotalGuests() - beds, 0);
     }

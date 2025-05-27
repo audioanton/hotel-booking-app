@@ -18,7 +18,6 @@ public class RoomDto {
     @NotBlank(message = "Room name is required")
     private String name;
     
-    @Valid
     @NotNull(message = "Room size is required")
     private RoomSizeDto roomSize;
 }
