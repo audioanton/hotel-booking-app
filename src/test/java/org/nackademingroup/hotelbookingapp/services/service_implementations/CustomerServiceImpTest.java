@@ -54,7 +54,7 @@ class CustomerServiceImpTest {
 
     @Test
     void createCustomer() {
-        customerService.createCustomer(customer);
+        customerService.createCustomer(customerDto);
         assertEquals(4, customerRepository.count());
         assertTrue(customerRepository
                 .findAll()
