@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.nackademingroup.hotelbookingapp.HotelBookingAppApplication;
 import org.nackademingroup.hotelbookingapp.dto.CustomerDto;
+import org.nackademingroup.hotelbookingapp.HotelBookingAppApplication;
 import org.nackademingroup.hotelbookingapp.models.Customer;
 import org.nackademingroup.hotelbookingapp.repositories.CustomerRepository;
 import org.nackademingroup.hotelbookingapp.services.service_interfaces.CustomerService;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 @SpringBootTest(classes = HotelBookingAppApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -27,6 +29,9 @@ class CustomerServiceImpTest {
     private CustomerService customerService;
     @Autowired
     private CustomerRepository customerRepository;
+
+    Customer customer = Customer.builder().name("Zingo").phoneNumber("4").build();
+    CustomerDto customerDto = CustomerDto.builder().name("Bingo").phoneNumber("1").build();
 
     private final List<Customer> testCustomers = List.of(
             Customer.builder().name("Bingo").phoneNumber("1").build(),
@@ -41,14 +46,36 @@ class CustomerServiceImpTest {
     }
 
     @Test
-    void getCustomerById() {
-        fail();
+    void toCustomerDto() {
+        CustomerDto actualDto = customerService.toCustomerDto(customer);
+        assertEquals(customer.getName(), actualDto.getName());
+        assertEquals(customer.getPhoneNumber(), actualDto.getPhoneNumber());
     }
 
-
     @Test
-    void toCustomerDto() {
-        fail();
+    void createCustomer() {
+        customerService.createCustomer(customerDto);
+        assertEquals(4, customerRepository.count());
+        assertTrue(customerRepository
+                .findAll()
+                .stream()
+                .map(Customer::getName)
+                .anyMatch(name -> name.equals(customer.getName())));
+        assertTrue(customerRepository
+                .findAll()
+                .stream()
+                .map(Customer::getPhoneNumber)
+                .anyMatch(number -> number.equals(customer.getPhoneNumber())));
+        assertFalse(customerRepository
+                .findAll()
+                .stream()
+                .map(Customer::getName)
+                .anyMatch(name -> name.equals("Wrong name")));
+        assertFalse(customerRepository
+                .findAll()
+                .stream()
+                .map(Customer::getPhoneNumber)
+                .anyMatch(number -> number.equals("999")));
     }
 
     @Test
@@ -71,6 +98,7 @@ class CustomerServiceImpTest {
     }
 
     @Test
+    @Transactional
     void toCustomer() {
         CustomerDto testDto = CustomerDto.builder()
                 .id(testCustomers.get(0).getId())
@@ -85,6 +113,7 @@ class CustomerServiceImpTest {
         assertEquals(testCustomers.get(0).getPhoneNumber(), actual.getPhoneNumber());
     }
 
+    @Transactional
     @Test
     void deleteCustomer() throws Exception {
         assert(customerService.getCustomerDtos().stream()
