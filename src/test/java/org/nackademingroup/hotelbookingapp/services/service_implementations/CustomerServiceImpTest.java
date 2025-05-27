@@ -3,6 +3,7 @@ package org.nackademingroup.hotelbookingapp.services.service_implementations;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.nackademingroup.hotelbookingapp.HotelBookingAppApplication;
 import org.nackademingroup.hotelbookingapp.dto.CustomerDto;
 import org.nackademingroup.hotelbookingapp.HotelBookingAppApplication;
 import org.nackademingroup.hotelbookingapp.models.Customer;
@@ -11,14 +12,12 @@ import org.nackademingroup.hotelbookingapp.services.service_interfaces.CustomerS
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 @SpringBootTest(classes = HotelBookingAppApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -99,6 +98,7 @@ class CustomerServiceImpTest {
     }
 
     @Test
+    @Transactional
     void toCustomer() {
         CustomerDto testDto = CustomerDto.builder()
                 .id(testCustomers.get(0).getId())
@@ -113,6 +113,7 @@ class CustomerServiceImpTest {
         assertEquals(testCustomers.get(0).getPhoneNumber(), actual.getPhoneNumber());
     }
 
+    @Transactional
     @Test
     void deleteCustomer() throws Exception {
         assert(customerService.getCustomerDtos().stream()
