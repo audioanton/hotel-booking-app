@@ -29,5 +29,7 @@ public interface BookingService {
 
     public void createBooking(RoomSelectionDto roomSelectionDto);
 
+    boolean hasActiveBookings(Long customerId);
+
     public int getExtraBedsForBooking(int beds, RoomSelectionDto roomSelectionDto);
 }

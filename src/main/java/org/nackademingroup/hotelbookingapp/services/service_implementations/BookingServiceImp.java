@@ -173,4 +173,10 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
     public int getExtraBedsForBooking(int beds, RoomSelectionDto roomSelectionDto) {
         return Math.max(roomSelectionDto.getTotalGuests() - beds, 0);
     }
+
+    @Override
+    public boolean hasActiveBookings(Long id) {
+        return bookingRepository.countByCustomerId(id) > 0;
+    }
+
 }
