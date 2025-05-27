@@ -10,8 +10,6 @@ public interface BookingService {
 
     public BookingDto getBookingById(Long id);
 
-    public Booking updateBooking(Booking booking);
-
     public void updateBookingExtraBeds(Long id, BookingDto bookingDto);
 
     public void updateBookingDates(Long id, BookingDto booking);

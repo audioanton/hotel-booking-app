@@ -6,7 +6,7 @@
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
-
+<main>
     <div>
         <h1>Bookings</h1>
         <div th:if="${bookings.isEmpty()}">No bookings found</div>
@@ -34,12 +34,13 @@
                     <td th:text="${booking.endDate}"></td>
                     <td>
                         <button th:onclick="'window.location.href=\'/bookings/' + ${booking.id} + '\''">
-                            Edit booking
+                            Edit
                         </button>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+</main>
 </body>
 </html>

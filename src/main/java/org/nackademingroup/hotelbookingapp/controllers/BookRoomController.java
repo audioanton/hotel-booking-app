@@ -59,11 +59,6 @@ public class BookRoomController {
             model.addAttribute("search", true);
             return "book-room";
         }
-
-
-        // Save the room selection and create a booking
-//        bookingService.saveRoomSelection(roomSelection);
-        System.out.println(roomSelectionDto);
         model.addAttribute("errorMessage", "");
         bookingService.createBooking(roomSelectionDto);
         return "redirect:/bookings";

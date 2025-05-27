@@ -28,29 +28,10 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
     private BookingDetailsService bookingDetailsService;
     @Autowired
     private CustomerService customerService;
-//    @Autowired
-//    private BookingService bookingService;
     @Autowired
     private RoomRepository roomRepository;
 
-    public List<BookingDto> getMockBookings() {
-
-
-        RoomSizeDto sizeDto = RoomSizeDto.builder().size("Large").build();
-        RoomDto roomDto = RoomDto.builder().name("The suit").roomSize(sizeDto).build();
-        BookingDetailsDto detailsDto = BookingDetailsDto.builder().extraBeds(1).room(roomDto).build();
-        CustomerDto customerDto = CustomerDto.builder().name("Antonio Larzon").build();
-        BookingDto bookingDto = BookingDto.builder().bookingDetails(detailsDto).customer(customerDto).build();
-
-        List<BookingDto> mockBookings = new ArrayList<>();
-
-        mockBookings.add(bookingDto);
-
-        return mockBookings;
-    }
-
-    //ToDo: Break duplicate code into function (the mapping of a booking to a bookingDto)
-
+    @Override
     public BookingDto getBookingById(Long id) {
         Optional<Booking> booking = bookingRepository.findById(id);
 
@@ -63,8 +44,22 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
         }).orElse(null);
     }
 
-    public Booking updateBooking(Booking booking) {
-        return booking;
+    @Override
+    public BookingDto toBookingDto(Booking booking, BookingDetailsDto details, CustomerDto customer) {
+        return BookingDto.builder()
+                .id(booking.getId())
+                .startDate(booking.getStartDate())
+                .endDate(booking.getEndDate())
+                .bookingDetails(details)
+                .customer(customer)
+                .build();
+    }
+
+    @Override
+    public List<BookingDto> getBookings() {
+        List<Booking> bookings = bookingRepository.findAll();
+        return bookings.stream().map(b -> getBookingById(b.getId()))
+                .toList();
     }
 
     @Override
@@ -131,30 +126,6 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
     }
 
     @Override
-    public BookingDto toBookingDto(Booking booking, BookingDetailsDto details, CustomerDto customer) {
-        return BookingDto.builder()
-                .id(booking.getId())
-                .startDate(booking.getStartDate())
-                .endDate(booking.getEndDate())
-                .bookingDetails(details)
-                .customer(customer)
-                .build();
-    }
-
-    @Override
-    public List<BookingDto> getBookings() {
-        List<Booking> bookings = bookingRepository.findAll();
-        return bookings.stream().map(b -> {
-                    RoomSizeDto roomSize = roomSizeService.toRoomSizeDto(b.getBookingDetails().getRoom().getRoomsize());
-                    RoomDto room = roomService.toRoomDto(b.getBookingDetails().getRoom(), roomSize);
-                    BookingDetailsDto detailsDto = bookingDetailsService.toBookingDetailsDto(b.getBookingDetails(), room);
-                    CustomerDto customerDto = customerService.toCustomerDto(b.getCustomer());
-                    return toBookingDto(b, detailsDto, customerDto);
-                })
-                .toList();
-    }
-
-    @Override
     public List<RoomDto> getAvailableRooms(RoomSearchDto roomSearchDto) {
         validateDates(roomSearchDto.getStartDate(), roomSearchDto.getEndDate());
         System.out.println(roomSearchDto);
@@ -199,5 +170,4 @@ public class BookingServiceImp implements org.nackademingroup.hotelbookingapp.se
     public int getExtraBedsForBooking(int beds, RoomSelectionDto roomSelectionDto) {
         return Math.max(roomSelectionDto.getTotalGuests() - beds, 0);
     }
-
 }

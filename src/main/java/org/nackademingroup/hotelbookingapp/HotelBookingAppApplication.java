@@ -2,7 +2,6 @@ package org.nackademingroup.hotelbookingapp;
 
 import org.nackademingroup.hotelbookingapp.models.*;
 import org.nackademingroup.hotelbookingapp.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,9 +16,7 @@ public class HotelBookingAppApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(HotelBookingAppApplication.class, args);
-
     }
-
 
     @Bean
     @Profile("!test")
@@ -40,7 +37,7 @@ public class HotelBookingAppApplication {
             List<Room> rooms = List.of(
                     Room.builder().name("The scrub").roomsize(roomSizes.get(0)).build(),
                     Room.builder().name("The standard").roomsize(roomSizes.get(1)).build(),
-                    Room.builder().name("The suit").roomsize(roomSizes.get(2)).build()
+                    Room.builder().name("The suite").roomsize(roomSizes.get(2)).build()
             );
             roomRepository.saveAll(rooms);
 
@@ -66,8 +63,6 @@ public class HotelBookingAppApplication {
                             .build()
             );
             bookingRepository.saveAll(bookings);
-
         };
     }
-
 }

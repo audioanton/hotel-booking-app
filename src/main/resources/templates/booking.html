@@ -6,14 +6,35 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
+<main>
 <div>
     <h1>Booking details</h1>
-    <p th:text="'Booking id: ' + ${booking.id}" />
-    <p th:text="'Guest name: ' + ${booking.customer.name}" />
-    <p th:text="'Room name: ' + ${booking.bookingDetails.room.name}" />
-    <p th:text="'Room size: ' + ${booking.bookingDetails.room.roomSize.size}" />
-    <p th:text="'Extra beds: ' + ${booking.bookingDetails.extraBeds}" />
-    <p th:text="'Dates: ' + ${booking.startDate} + ' - ' + ${booking.endDate}" />
+    <table>
+        <tr>
+            <td>Booking id</td>
+            <td th:text="${booking.id}" style="text-align: left"></td>
+        </tr>
+        <tr>
+            <td>Guest name</td>
+            <td th:text="${booking.customer.name}" style="text-align: left"></td>
+        </tr>
+        <tr>
+            <td>Room name</td>
+            <td th:text="${booking.bookingDetails.room.name}" style="text-align: left"></td>
+        </tr>
+        <tr>
+            <td>Room size</td>
+            <td th:text="${booking.bookingDetails.room.roomSize.size}" style="text-align: left"></td>
+        </tr>
+        <tr>
+            <td>Extra beds</td>
+            <td th:text="${booking.bookingDetails.extraBeds}" style="text-align: left"></td>
+        </tr>
+        <tr>
+            <td>Dates</td>
+            <td th:text="${booking.startDate} + ' - ' + ${booking.endDate}" style="text-align: left"></td>
+        </tr>
+    </table>
 
     <form th:action="@{/bookings/{id}/cancel(id=${booking.id})}" method="post">
         <button type="submit" style="background-color: #ff4444; color: white;">Cancel booking</button>
@@ -49,17 +70,10 @@
         <div th:if="${successMessageDates}" class="success-message" style="color: green;" th:text="${successMessageDates}"></div>
     </form>
     <br>
-    <p>Possible ToDo:</p>
-    <button type="submit"
-            th:action="@{/edit-booking/change-details-todo(id=${booking.id})}"
-            th:object="${booking}"
-            method="post">Search alternatives</button>
-    <br>
-    <br>
-    <a href="/bookings">← Back to bookings</a>
+    <a href="/bookings" style="margin-bottom: 40px">← Back to bookings</a>
 
     <div th:if="${successMessage}" th:text="${successMessage}"></div>
-
 </div>
+</main>
 </body>
 </html>
